@@ -1,0 +1,9 @@
+Allow groups to evaluate each other, both public and private evals
+Sign in page
+Register page - limit who has access to register page, generate access codes
+First name, Last name, email, t#, 
+how scores, be able to agregate the comments
+
+First 2 weeks we need login and registration to be complete
+
+private feedback only goes to instructor

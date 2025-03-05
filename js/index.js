@@ -13,20 +13,23 @@ var emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 var tNumberRegEx = /^T\d{8}$/;
 
 //These functions bring up the login and sign up modals
-document.querySelector('#btnShowSignUp').addEventListener('click', function() {
-  document.querySelector('#signUpModal').style.display = 'block';
-});
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('#btnShowSignUp').addEventListener('click', function() {
+    document.querySelector('#signUpCard').style.display = 'block';
+  });
 
-document.querySelector('#btnCloseSignUp').addEventListener('click', function() {
-  document.querySelector('#signUpModal').style.display = 'none';
-});
+  document.querySelector('#btnCloseSignUp').addEventListener('click', function() {
+    document.querySelector('#signUpCard').style.display = 'none';
+  });
 
-document.querySelector('#btnShowLogin').addEventListener('click', function() {
-  document.querySelector('#loginModal').style.display = 'block';
-});
+  document.querySelector('#btnShowLogin').addEventListener('click', function() {
+    console.log('Login');
+    document.querySelector('#loginCard').style.display = 'block';
+  });
 
-document.querySelector('#btnCloseLogin').addEventListener('click', function() {
-  document.querySelector('#loginModal').style.display = 'none';
+  document.querySelector('#btnCloseLogin').addEventListener('click', function() {
+    document.querySelector('#loginCard').style.display = 'none';
+  });
 });
 
 //This function handles the sign up button

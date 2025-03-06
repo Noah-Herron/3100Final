@@ -16,6 +16,7 @@ var tNumberRegEx = /^T\d{8}$/;
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#btnShowSignUp').addEventListener('click', function() {
     document.querySelector('#signUpCard').style.display = 'block';
+    document.querySelector('#loginCard').style.display = 'none';
   });
 
   document.querySelector('#btnCloseSignUp').addEventListener('click', function() {
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#btnShowLogin').addEventListener('click', function() {
     console.log('Login');
     document.querySelector('#loginCard').style.display = 'block';
+    document.querySelector('#signUpCard').style.display = 'none';
   });
 
   document.querySelector('#btnCloseLogin').addEventListener('click', function() {

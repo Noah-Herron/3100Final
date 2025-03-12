@@ -25,7 +25,7 @@ jobs:
       - name: Deploy Application
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.GCP_USER }}@${{ secrets.GCP_HOST }} << 'EOF'
-            cd /var/www/html
+            cd ~/3100Final
             git pull origin main
             npm install
             systemctl restart nginx

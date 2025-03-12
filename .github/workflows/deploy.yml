@@ -12,24 +12,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.GCP_HOST }}
-          username: ${{ secrets.GCP_USER }}
-          key: ${{ secrets.GCP_SSH_KEY }}
-          script: |
-            cd /var/www/html
-            git pull origin main
-            npm install
-            systemctl restart nginx
-
-      - name: Deploy
-        run: gcloud app deploy
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -39,3 +21,12 @@ jobs:
 
       - name: Test SSH Connection
         run: ssh -i ~/.ssh/id_rsa ${{ secrets.USER }}@${{ secrets.HOST }} "echo SSH Connection Successful"
+
+      - name: Deploy Application
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
+            cd /var/www/html
+            git pull origin main
+            npm install
+            systemctl restart nginx
+          EOF

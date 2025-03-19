@@ -7,6 +7,8 @@
 *   Class:        CSC 3100                            *
 ******************************************************/
 
+//Todo, add api calls
+
 //RegEx Expressions
 var passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-=+/])[A-Za-z\d!@#$%^&*-=+/]{8,}$/;
 var emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -24,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.querySelector('#btnShowLogin').addEventListener('click', function() {
-    console.log('Login');
     document.querySelector('#loginCard').style.display = 'block';
     document.querySelector('#signUpCard').style.display = 'none';
   });
@@ -45,7 +46,6 @@ document.querySelector('#btnSignUp').addEventListener('click', function(event) {
   const confirmPassword = document.querySelector('#signUpConfirmPassword').value;
   const email = document.querySelector('#signUpEmail').value;
   const tNumber = document.querySelector('#signUpTNumber').value;
-  const classCode = document.querySelector('#signUpClassCode').value;
   const firstName = document.querySelector('#signUpFirstName').value;
   const lastName = document.querySelector('#signUpLastName').value;
 
@@ -84,11 +84,6 @@ document.querySelector('#btnSignUp').addEventListener('click', function(event) {
     blnError = true;
   }
 
-  if (classCode.length < 5) {
-    message += 'Class Code must be at least 5 characters.\n';
-    blnError = true;
-  }
-
   if (firstName.length < 1) {
     message += 'First name is required.\n';
     blnError = true;
@@ -108,4 +103,27 @@ document.querySelector('#btnSignUp').addEventListener('click', function(event) {
     });
     return;
   }
+
+  //If there is no error, send the data to the server
+  fetch('/user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+      email: email,
+      tNumber: tNumber,
+      firstName: firstName,
+      lastName: lastName
+    })
+  });
+
+  //Display a success message
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: 'Account created successfully!  Please log in!'
+  });
 });

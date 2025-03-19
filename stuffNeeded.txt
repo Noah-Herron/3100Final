@@ -7,3 +7,23 @@ how scores, be able to agregate the comments
 First 2 weeks we need login and registration to be complete
 
 private feedback only goes to instructor
+
+HTML, CSS, JavaScript, SQL
+
+Google Lighthouse, You want score to be atleast a 90
+
+Landing page - (Marketing page), everyone goes there first, 
+
+Use a relational Database - all persistent data, stores users and credentials, and all reviews
+
+Intro.js - tutorial for your website
+
+class metrics - average, minimum, and the lower outliers (possibly adjust that threshold)
+
+Clean and Modern, 
+
+Different Experience for Instructor and Student
+ 	- everyone is considered an instructor until they are added to a class
+
+Possibly add functionality for editing / removing previous reviews
+

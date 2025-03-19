@@ -7,6 +7,8 @@
 *   Class:        CSC 3100                            *
 ******************************************************/
 
+//Todo, add api calls
+
 //RegEx Expressions
 var passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-=+/])[A-Za-z\d!@#$%^&*-=+/]{8,}$/;
 var emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

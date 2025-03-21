@@ -10,120 +10,112 @@
 //Todo, add api calls
 
 //RegEx Expressions
-var passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-=+/])[A-Za-z\d!@#$%^&*-=+/]{8,}$/;
-var emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-var tNumberRegEx = /^T\d{8}$/;
+const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*\-=+/])[A-Za-z\d!@#$%^&*\-=+/]{8,}$/;
+const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const tNumberRegEx = /^T\d{8}$/;
 
-//These functions bring up the login and sign up modals
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('#btnShowSignUp').addEventListener('click', function() {
-    document.querySelector('#signUpCard').style.display = 'block';
-    document.querySelector('#loginCard').style.display = 'none';
+document.addEventListener("DOMContentLoaded", function () {
+
+  function showError(inputId, message) {
+      let errorElement = document.getElementById(inputId + "Error");
+      if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.style.display = "block";
+      }
+  }
+
+  function clearErrors() {
+      document.querySelectorAll(".error-text").forEach(el => el.style.display = "none");
+  }
+
+  document.getElementById("signUpForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearErrors();
+      let valid = true;
+
+      let username = document.getElementById("signUpUsername").value.trim();
+      let firstName = document.getElementById("signUpFirstName").value.trim();
+      let lastName = document.getElementById("signUpLastName").value.trim();
+      let tNumber = document.getElementById("signUpTNumber").value.trim();
+      let email = document.getElementById("signUpEmail").value.trim();
+      let password = document.getElementById("signUpPassword").value;
+      let confirmPassword = document.getElementById("signUpConfirmPassword").value;
+
+      if (username === "") {
+          showError("signUpUsername", "Username is required.");
+          valid = false;
+      }
+      if (firstName === "") {
+          showError("signUpFirstName", "First name is required.");
+          valid = false;
+      }
+      if (lastName === "") {
+          showError("signUpLastName", "Last name is required.");
+          valid = false;
+      }
+      if (!tNumberRegEx.test(tNumber)) {
+          showError("signUpTNumber", "T-Number must start with 'T' followed by 8 digits.");
+          valid = false;
+      }
+      if (!emailRegEx.test(email)) {
+          showError("signUpEmail", "Enter a valid email address.");
+          valid = false;
+      }
+      if (!passwordRegEx.test(password)) {
+          showError("signUpPassword", "Password must be at least 8 characters, contain an uppercase letter, a number, and a special character.");
+          valid = false;
+      }
+      if (password !== confirmPassword) {
+          showError("signUpConfirmPassword", "Passwords must match.");
+          valid = false;
+      }
+
+      if (!valid) {
+          Swal.fire({ icon: "error", title: "Validation Error", text: "Please fix the errors." });
+      } else {
+          Swal.fire({ icon: "success", title: "Success", text: "Account created successfully!" });
+      }
   });
 
-  document.querySelector('#btnCloseSignUp').addEventListener('click', function() {
-    document.querySelector('#signUpCard').style.display = 'none';
+  document.getElementById("loginForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearErrors();
+      let valid = true;
+
+      let username = document.getElementById("loginUsername").value.trim();
+      let password = document.getElementById("loginPassword").value;
+
+      if (username === "") {
+          showError("loginUsername", "Username is required.");
+          valid = false;
+      }
+      if (!passwordRegEx.test(password)) {
+          showError("loginPassword", "Password must be at least 8 characters, contain an uppercase letter, a number, and a special character.");
+          valid = false;
+      }
+
+      if (!valid) {
+          Swal.fire({ icon: "error", title: "Login Failed", text: "Please enter valid credentials." });
+      } else {
+          Swal.fire({ icon: "success", title: "Welcome Back!", text: "Login successful." });
+      }
   });
 
-  document.querySelector('#btnShowLogin').addEventListener('click', function() {
-    document.querySelector('#loginCard').style.display = 'block';
-    document.querySelector('#signUpCard').style.display = 'none';
+  document.getElementById("btnShowSignUp").addEventListener("click", () => {
+      document.getElementById("signUpCard").style.display = "block";
+      document.getElementById("loginCard").style.display = "none";
   });
 
-  document.querySelector('#btnCloseLogin').addEventListener('click', function() {
-    document.querySelector('#loginCard').style.display = 'none';
-  });
-});
-
-//This function handles the sign up button
-document.querySelector('#btnSignUp').addEventListener('click', function(event) {
-  //Prevents the race condition
-  event.preventDefault();
-
-  //Gets the parameters entered in the form
-  const username = document.querySelector('#signUpUsername').value;
-  const password = document.querySelector('#signUpPassword').value;
-  const confirmPassword = document.querySelector('#signUpConfirmPassword').value;
-  const email = document.querySelector('#signUpEmail').value;
-  const tNumber = document.querySelector('#signUpTNumber').value;
-  const firstName = document.querySelector('#signUpFirstName').value;
-  const lastName = document.querySelector('#signUpLastName').value;
-
-  //Base variables for error checking
-  let message = '';
-  let blnError = false;
-
-  //All these check the values in the form
-  if (username.length < 5) {
-    message += 'Username must be at least 5 characters.\n';
-    blnError = true;
-  }
-
-  if (!passwordRegEx.test(password)) {
-    message += 'Password must be at least 8 characters, contain at least one uppercase letter, one number, and one special character.\n';
-    blnError = true;
-  }
-
-  if (!passwordRegEx.test(confirmPassword)) {
-    message += 'Confirm Password must be at least 8 characters, contain at least one uppercase letter, one number, and one special character.\n';
-    blnError = true;
-  }
-
-  if (password != confirmPassword) {
-    message += 'Passwords do not match.\n';
-    blnError = true;
-  }
-
-  if (!emailRegEx.test(email)) {
-    message += 'Invalid email address.\n';
-    blnError = true;
-  }
-
-  if (!tNumberRegEx.test(tNumber)) {
-    message += 'Invalid T-Number.\n';
-    blnError = true;
-  }
-
-  if (firstName.length < 1) {
-    message += 'First name is required.\n';
-    blnError = true;
-  }
-
-  if (lastName.length < 1) {
-    message += 'Last name is required.\n';
-    blnError = true;
-  }
-
-  //If there is an error, display the error
-  if (blnError) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error with parameters!',
-      text: message
-    });
-    return;
-  }
-
-  //If there is no error, send the data to the server
-  fetch('/user', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      username: username,
-      password: password,
-      email: email,
-      tNumber: tNumber,
-      firstName: firstName,
-      lastName: lastName
-    })
+  document.getElementById("btnShowLogin").addEventListener("click", () => {
+      document.getElementById("loginCard").style.display = "block";
+      document.getElementById("signUpCard").style.display = "none";
   });
 
-  //Display a success message
-  Swal.fire({
-    icon: 'success',
-    title: 'Success!',
-    text: 'Account created successfully!  Please log in!'
+  document.getElementById("btnCloseSignUp").addEventListener("click", () => {
+      document.getElementById("signUpCard").style.display = "none";
+  });
+
+  document.getElementById("btnCloseLogin").addEventListener("click", () => {
+      document.getElementById("loginCard").style.display = "none";
   });
 });

@@ -4,100 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Evaluations</title>
-
+    
     <!-- CDNs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        .error-text { color: red; font-size: 0.875em; display: none; }
+        .card-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar for the main page -->
-    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark" aria-label="Main Navigation">
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Group Evaluations</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Navbar items -->
-                <!-- Login and Signup -->
                 <div class="d-flex ms-auto">
-                    <button type="button" class="btn btn-primary me-2" id="btnShowLogin" aria-label="Log in">Log In</button>
-                    <button type="button" class="btn btn-secondary" id="btnShowSignUp" aria-label="Sign up">Sign Up</button>
+                    <button class="btn btn-primary me-2" id="btnShowLogin">Log In</button>
+                    <button class="btn btn-secondary" id="btnShowSignUp">Sign Up</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Sign Up Card -->
-    <div id="signUpCard" class="card col-lg-4 col-md-6 col-sm-8 mx-auto mt-3 p-4 shadow-lg centered-container" style="display: none;">
+    <div id="signUpCard" class="card card-container shadow-lg" style="display: none;">
         <div class="card-body">
-            <button id="btnCloseSignUp" type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" aria-controls="signUpCard"></button>
+            <button id="btnCloseSignUp" class="btn-close position-absolute top-0 end-0 m-3"></button>
             <h5 class="card-title">Sign Up</h5>
+            <form id="signUpForm">
+                <div class="mb-3">
+                    <label for="signUpUsername" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="signUpUsername" required>
+                    <div class="error-text" id="signUpUsernameError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signUpFirstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="signUpFirstName" required>
+                    <div class="error-text" id="signUpFirstNameError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signUpLastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="signUpLastName" required>
+                    <div class="error-text" id="signUpLastNameError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signUpTNumber" class="form-label">T-Number</label>
+                    <input type="text" class="form-control" id="signUpTNumber" required>
+                    <div class="error-text" id="signUpTNumberError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signUpEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="signUpEmail" required>
+                    <div class="error-text" id="signUpEmailError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signUpPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="signUpPassword" required>
+                    <div class="error-text" id="signUpPasswordError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="signUpConfirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="signUpConfirmPassword" required>
+                    <div class="error-text" id="signUpConfirmPasswordError"></div>
+                </div>
+                <button id="btnSignUp" type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
         </div>
-        <!-- Sign Up Form -->
-        <form>
-            <div class="mb-3">
-                <label for="signUpUsername" class="form-label">Username</label>
-                <input type="text" class="form-control" id="signUpUsername" required aria-describedby="usernameHelp">
-                <div id="usernameHelp" class="form-text">Username must be unique.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signUpFirstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="signUpFirstName" required aria-describedby="firstNameHelp">
-                <div id="firstNameHelp" class="form-text">Please enter your first name.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signUpLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="signUpLastName" required aria-describedby="lastNameHelp">
-                <div id="lastNameHelp" class="form-text">Please enter your last name.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signUpEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="signUpEmail" required aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signUpPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="signUpPassword" required aria-describedby="passwordHelp">
-                <div id="passwordHelp" class="form-text">Password must be at least 8 characters long.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signUpConfirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="signUpConfirmPassword" required aria-describedby="confirmPasswordHelp">
-                <div id="confirmPasswordHelp" class="form-text">Please confirm your password.</div>
-            </div>
-            <div class="mb-3">
-                <label for="signUpTNumber" class="form-label">T-Number</label>
-                <input type="text" class="form-control" id="signUpTNumber" required aria-describedby="tnumberHelp">
-                <div id="tnumberHelp" class="form-text">Please enter your T-Number.</div>
-            </div>
-            <button id="btnSignUp" type="submit" class="btn btn-primary">Sign Up</button>
-        </form>
     </div>
 
     <!-- Login Card -->
-    <div id="loginCard" class="card col-lg-4 col-md-6 col-sm-8 mx-auto mt-3 p-4 shadow-lg centered-container" style="display: none;">
+    <div id="loginCard" class="card card-container shadow-lg" style="display: none;">
         <div class="card-body">
-            <button id="btnCloseLogin" type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" aria-controls="loginCard"></button>
+            <button id="btnCloseLogin" class="btn-close position-absolute top-0 end-0 m-3"></button>
             <h5 class="card-title">Log In</h5>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="loginUsername" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="loginUsername" required>
+                    <div class="error-text" id="loginUsernameError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
+                    <div class="error-text" id="loginPasswordError"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </form>
         </div>
-        <!-- Login Form -->
-        <form>
-            <div class="mb-3">
-                <label for="loginUsername" class="form-label">Username</label>
-                <input type="text" class="form-control" id="loginUsername" required aria-describedby="loginUsernameHelp">
-                <div id="loginUsernameHelp" class="form-text">Please enter your username.</div>
-            </div>
-            <div class="mb-3">
-                <label for="loginPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="loginPassword" required aria-describedby="loginPasswordHelp">
-                <div id="loginPasswordHelp" class="form-text">Please enter your password.</div>
-            </div>
-            <button type="submit" class="btn btn-primary">Log In</button>
-        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/temp.js"></script>
 </body>
 </html>

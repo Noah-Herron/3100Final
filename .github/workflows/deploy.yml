@@ -28,5 +28,5 @@ jobs:
             cd ~/3100Final
             git pull origin main
             npm install
-            systemctl restart nginx
+            sudo systemctl restart nginx
           EOF

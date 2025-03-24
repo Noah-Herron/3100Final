@@ -26,6 +26,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.GCP_USER }}@${{ secrets.GCP_HOST }} << 'EOF'
             cd ~/3100Final
+            git remote -v
             git pull origin main
             npm install
             sudo systemctl restart nginx

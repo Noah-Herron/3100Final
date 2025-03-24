@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/Noah-Herron/3100Final#readme",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "i": "^0.3.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

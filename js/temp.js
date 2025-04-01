@@ -93,11 +93,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnShowSignUp").addEventListener("click", () => {
         document.getElementById("signUpCard").style.display = "block";
         document.getElementById("loginCard").style.display = "none";
+        document.getElementById("mainCard").style.display = "none";
     });
 
     document.getElementById("btnShowLogin").addEventListener("click", () => {
         document.getElementById("loginCard").style.display = "block";
         document.getElementById("signUpCard").style.display = "none";
+        document.getElementById("mainCard").style.display = "none";
     });
 
     document.getElementById("btnCloseSignUp").addEventListener("click", () => {
@@ -112,10 +114,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnSignBackToWeb").addEventListener("click", () => {
         document.getElementById("signUpCard").style.display = "none";
         document.getElementById("loginCard").style.display = "none";
+        document.getElementById("mainCard").style.display = "block";
     });
     document.getElementById("btnLoginBackToWeb").addEventListener("click", () => {
         document.getElementById("signUpCard").style.display = "none";
         document.getElementById("loginCard").style.display = "none";
+        document.getElementById("mainCard").style.display = "block";
     });
 
     document.getElementById("btnShowLogin1").addEventListener("click", () => {
@@ -124,14 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     document.getElementById("btnShowSignUp1").addEventListener("click", () => {
         document.getElementById("signUpCard").style.display = "block";
-        document.getElementById("loginCard").style.display = "none";
-    });
-    document.getElementById("btnLoginBackToWeb").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "none";
-        document.getElementById("loginCard").style.display = "none";
-    });
-    document.getElementById("btnLoginBackToWeb").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "none";
         document.getElementById("loginCard").style.display = "none";
     });
 });

@@ -187,13 +187,23 @@
             background: linear-gradient(to bottom, var(--gold), var(--dark-purple));
         }
         
-    </style>
+    
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+</style>
 </head>
 
 <body>
     <div class="wrapper">
     <header class="container-fluid py-3">
-        <nav class="d-flex justify-content-between align-items-center flex-wrap">
+        <nav role="navigation" class="d-flex justify-content-between align-items-center flex-wrap">
             <ul class="nav">
                 <li class="nav-item"><a href="#" class="nav-link text-white">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Assets</a></li>
@@ -211,7 +221,7 @@
             </div>
         </nav>
     </header>
-    <main id="mainCard" class="container text-center mt-5">
+    <main role="main" id="mainCard" class="container text-center mt-5">
         <!-- Main card -->
         <section class="hero position-relative floating">
             <h1 class="display-3 fw-bold">One-click for <span>Evaluations</span></h1>
@@ -234,7 +244,7 @@
 
     <!-- Sign Up Card-->
     <div id="signUpCard" class="container-fluid py-4" style="display: none">
-        <div class="container-card row g-0">
+        <div class="container-card row g-0 fade-in">
             <!-- Left Panel -->
             <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
                 <div>
@@ -256,35 +266,35 @@
                 </p>
 
                 <form id="signUpForm">
-                    <input type="text" class="form-control mb-3" id="signUpUsername" placeholder="Username" required />
+                    <input type="text" class="form-control mb-3" id="strSignUpUsername" placeholder="Username" required />
                     <div class="error-text" id="signUpUsernameError"></div>
                     <div class="row">
                         <div class="col-md-6 mb-2">
-                            <input type="text" class="form-control" id="signUpFirstName" placeholder="First name"
+                            <input type="text" class="form-control" id="strSignUpFirstName" placeholder="First name"
                                 required />
                             <div class="error-text" id="signUpFirstNameError"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" id="signUpLastName" placeholder="Last name"
+                            <input type="text" class="form-control" id="strSignUpLastName" placeholder="Last name"
                                 required />
                             <div class="error-text" id="signUpLastNameError"></div>
                         </div>
                     </div>
 
-                    <input type="text" class="form-control mb-3" id="signUpTNumber" placeholder="T-Number" required />
+                    <input type="text" class="form-control mb-3" id="strSignUpTNumber" placeholder="T-Number" required />
                     <div class="error-text" id="signUpTNumberError"></div>
 
-                    <input type="email" class="form-control mb-3" id="signUpEmail" placeholder="Email" required />
+                    <input type="email" class="form-control mb-3" id="strSignUpEmail" placeholder="Email" required />
                     <div class="error-text" id="signUpEmailError"></div>
 
                     <div class="input-group mb-3">
-                        <input type="password" id="signUpPassword" class="form-control"
+                        <input type="password" id="strSignUpPassword" class="form-control"
                             placeholder="Enter your password" required />
                     </div>
                     <div class="error-text" id="signUpPasswordError"></div>
 
                     <div class="input-group mb-3">
-                        <input type="password" id="signUpConfirmPassword" class="form-control"
+                        <input type="password" id="strSignUpConfirmPassword" class="form-control"
                             placeholder="Confirm Password" required />
                     </div>
                     <div class="error-text" id="signUpConfirmPasswordError"></div>
@@ -305,7 +315,7 @@
 
     <!-- Login Card -->
     <div id="loginCard" class="container-fluid py-4" style="display: none">
-        <div class="container-card row g-0">
+        <div class="container-card row g-0 fade-in">
             <!-- Left Panel -->
             <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
                 <div>
@@ -328,11 +338,11 @@
 
                 <form id="loginForm">
                     <div class="input-group mb-3">
-                        <input type="text" id="loginUsername" class="form-control" placeholder="Username" required />
+                        <input type="text" id="strLoginUsername" class="form-control" placeholder="Username" required />
                     </div>
 
                     <div class="input-group mb-3">
-                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password"
+                        <input type="password" id="strLoginPassword" class="form-control" placeholder="Enter your password"
                             required />
                     </div>
                     <div class="error-text" id="loginPasswordError"></div>

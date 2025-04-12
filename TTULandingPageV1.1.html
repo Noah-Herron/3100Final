@@ -1,15 +1,88 @@
+<!-- TTU Coder-->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Evaluations</title>
-
-    <!-- CDNs -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
+        :root {
+            --bright-purple: #8a2be2;
+            --dark-purple: #5a1ba0;
+            --gold: #ffd700;
+            --default-transition-duration: 0.3s;
+            --default-transition-timing-function: ease-in-out;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* viewport height */
+            background: linear-gradient(to bottom, var(--gold), var(--dark-purple));
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-container {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            transition: all 0.4s ease-in-out;
+        }
+
+        .navbar {
+            background-color: #1e1e1efd !important;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease-in-out;
+        }
+
+        .navbar-container.shrunk {
+            top: 10px;
+        }
+
+        .navbar-container.shrunk .navbar {
+            width: 60%;
+            border-radius: 50px;
+            background-color: #1e1e1efd !important;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar.shrunk .nav-link,
+        .navbar.shrunk .btn {
+            color: white !important;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease-in-out;
+            border: 2px solid transparent;
+            border-radius: 10px;
+        }
+
+        .nav-link:hover {
+            border-color: var(--gold);
+            background-color: rgba(0, 0, 0, 0.386);
+        }
+
         .error-text {
             color: red;
             font-size: 0.875em;
@@ -20,12 +93,6 @@
             max-width: 500px;
             margin: auto;
             padding: 15px;
-        }
-
-        :root {
-            --bright-purple: #8a2be2;
-            --dark-purple: #5a1ba0;
-            --gold: #ffd700;
         }
 
         .container-card {
@@ -45,20 +112,8 @@
         }
 
         .logo-image {
-            background: url("image/TTULogo2.png") no-repeat center/contain;
+            background: url("../image/TTULogo2.png") no-repeat center/contain;
             min-height: 200px;
-        }
-
-        .btn-purple {
-            background-color: var(--bright-purple);
-            /* Bootstrap purple */
-            border-color: var(--bright-purple);
-            color: white;
-        }
-
-        .btn-purple:hover {
-            background-color: var(--dark-purple);
-            border-color: var(--dark-purple);
         }
 
         #signUpCard {
@@ -73,42 +128,23 @@
             margin: auto;
         }
 
-        .form-control:focus {
-            border-color: var(--dark-purple) !important;
-            /* Change border to purple */
-            box-shadow: 0 0 5px var(--bright-purple) !important;
-            /*adds a glowing sort of border*/
-            outline: none !important;
+        .hero-section {
+            padding: 120px 0 60px;
+            text-align: center;
+            transition: opacity 0.5s ease-in-out;
         }
 
-        .text-purple {
-            color: var(--bright-purple) !important;
-            /* !important overrides Bootstrap */
+        .hero-section h1 span {
+            color: var(--gold);
         }
 
-        .text-purple:hover {
-            color: var(--dark-purple) !important;
-        }
-        .form-check-input {
-            border-color: var(--bright-purple); /* Outline color */
+        .hero-section .btn {
+            margin: 10px;
+            transition: transform 0.2s ease-in-out;
         }
 
-        .form-check-input:checked {
-            background-color: var(--bright-purple); /* Fill color when checked */
-            border-color: var(--bright-purple);
-        }
-
-        .form-check-input:focus {
-            box-shadow: 0 0 5px var(--bright-purple); /* Add a purple glow on focus */
-        }
-        .navbar {
-            background-color: white;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .hero-section .btn:hover {
+            transform: scale(1.05);
         }
 
         .btn-purple {
@@ -116,6 +152,7 @@
             border-color: var(--bright-purple);
             color: white;
             box-shadow: 0 0 10px var(--bright-purple);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
         .btn-purple:hover {
@@ -124,255 +161,313 @@
             box-shadow: 0 0 15px var(--gold);
         }
 
-        .hero h1 span {
-            color: var(--gold);
+        .btn-white {
+            border-color: rgba(255, 255, 255, 0.549);
+            color: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.549);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .hero p {
-            opacity: 0.8;
+        .btn-white:hover {
+            background-color: var(--dark-purple);
+            border-color: var(--dark-purple);
+            box-shadow: 0 0 15px var(--gold);
         }
 
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
 
-        .btn-light, .btn-outline-light {
+        .section-light {
+            padding: 60px 20px;
+            color: #ccc;
             transition: all 0.3s ease-in-out;
         }
-        .btn-light:hover {
-            background: #fff;
-            color: #000;
-            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+
+        .section-light h2 {
+            color: white;
+            transition: color 0.3s ease-in-out;
         }
-        .btn-outline-light:hover {
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+
+        .feature-card {
+            background-color: #1e1e1e;
+            border: none;
+            color: white;
+            box-shadow: 0 4px 20px rgba(137, 43, 226, 0.627);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(255, 217, 0, 0.658);
+        }
+
+        .footer {
+            margin-top: auto;
+            background-color: #1e1e1efd !important;
+            color: #bbb;
+            padding: 40px 0;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .footer h6 {
+            color: white;
+        }
+
+        .footer a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
         .partners span {
             display: inline-block;
             padding: 5px 15px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             margin: 5px;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
         }
+
         .partners span:hover {
             transform: scale(1.1);
             background: rgba(255, 255, 255, 0.2);
         }
-        .floating {
-            animation: float 4s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        .auth-buttons button {
-            margin: 5px;
-        }
-        .auth-buttons a {
-            margin: 5px;
-        }
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            font-family: 'Inter', sans-serif;
-            color: white;
-            overflow-x: hidden;
-        }
-        .wrapper {
-            flex: 1;
-            background: linear-gradient(to bottom, var(--gold), var(--dark-purple));
-        }
-        
-    
-.fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-</style>
+    </style>
 </head>
 
 <body>
-    <div class="wrapper">
-    <header class="container-fluid py-3">
-        <nav role="navigation" class="d-flex justify-content-between align-items-center flex-wrap">
-            <ul class="nav">
-                <li class="nav-item"><a href="#" class="nav-link text-white">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white">Assets</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white">FAQ</a></li>
-            </ul>
-            <div class="auth-buttons d-flex flex-wrap">
-                <button class="btn btn-outline-light" id="btnShowLogin">
-                    Login
-                </button>
-                <button class="btn btn-light" id="btnShowSignUp">
-                    Create Account
-                </button>
+    <div class="navbar-container" id="navbarContainer">
+        <nav class="navbar navbar-expand-lg navbar-light justify-content-center" id="mainNavbar">
+            <div class="container d-flex flex-column align-items-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 w-100" id="navbarContent">
+                    <ul class="nav justify-content-center">
+                        <li class="nav-item"><a href="#" class="nav-link text-white">Home</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link text-white">Assets</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link text-white">Features</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link text-white">Pricing</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link text-white">FAQ</a></li>
+                    </ul>
+                    <div class="auth-buttons d-flex flex-wrap">
+                        <button class="btn btn-purple me-2" id="btnShowLogin">Login</button>
+                        <button class="btn btn-white" id="btnShowSignUp">Create Account</button>
+                    </div>
+                </div>
             </div>
         </nav>
-    </header>
-    <main role="main" id="mainCard" class="container text-center mt-5">
-        <!-- Main card -->
-        <section class="hero position-relative floating">
-            <h1 class="display-3 fw-bold">One-click for <span>Evaluations</span></h1>
-            <p class="lead">Dive into Evaluating your Peers</p>
-            <div class="mt-4">
-                <a href="#" class="btn btn-light btn-lg">Open App</a>
-                <a href="#" class="btn btn-outline-light btn-lg ms-3">Discover More</a>
-            </div>
-        </section>
+    </div>
 
-        <!-- Spacer Section -->
-        <section class="container text-center my-5">
-            <div class="py-5">
-                <h2 class="display-5 fw-semibold">Still exploring?</h2>
-                <p class="lead">Filler Needed More Space to Fill.</p>
-                <a href="#" class="btn btn-outline-light btn-lg mt-3">Learn More</a>
-            </div>
-        </section>
-    </main>
-
-    <!-- Sign Up Card-->
-    <div id="signUpCard" class="container-fluid py-4" style="display: none">
-        <div class="container-card row g-0 fade-in">
-            <!-- Left Panel -->
-            <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
-                <div>
-                    <h2 class="fw-bold">TTU</h2>
-                    <div class="logo-image"></div>
+    <div class="content-wrapper">
+        <main role="main" id="mainCard" class="container text-center mt-5">
+            <section class="hero-section">
+                <div class="container">
+                    <h1 class="display-4 fw-bold">One-click for <span>Peer Evaluations</span></h1>
+                    <p class="lead">Streamline your group assessments with ease</p>
+                    <a href="#" class="btn btn-light btn-lg">Open App</a>
+                    <a href="#features" class="btn btn-outline-light btn-lg">Discover More</a>
                 </div>
-                <button id="btnSignBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0">
-                    Back to website
-                </button>
-            </div>
+            </section>
 
-            <!-- Right Panel (Sign Up Form) -->
-            <div class="col-md-9 col-lg-9 p-4">
-                <button id="btnCloseSignUp" class="btn-close position-absolute top-0 end-0 m-3"></button>
-                <h1 class="fw-bold">Create an account</h1>
-                <p>
-                    Already have an account?
-                    <a href="#" class="text-purple" id="btnShowLogin1">Log in</a>
-                </p>
-
-                <form id="signUpForm">
-                    <input type="text" class="form-control mb-3" id="strSignUpUsername" placeholder="Username" required />
-                    <div class="error-text" id="signUpUsernameError"></div>
+            <section class="section-light" id="features">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold">How It Works</h2>
+                        <p class="lead">Our evaluation tool makes collaboration smoother than ever.</p>
+                    </div>
                     <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <input type="text" class="form-control" id="strSignUpFirstName" placeholder="First name"
-                                required />
-                            <div class="error-text" id="signUpFirstNameError"></div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card feature-card p-4 h-100">
+                                <h5 class="fw-bold text-gold">Step 1</h5>
+                                <p>Create or join a group. Set your evaluation criteria in minutes.</p>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" id="strSignUpLastName" placeholder="Last name"
-                                required />
-                            <div class="error-text" id="signUpLastNameError"></div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card feature-card p-4 h-100">
+                                <h5 class="fw-bold text-gold">Step 2</h5>
+                                <p>Each member fills out quick evaluations anonymously.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card feature-card p-4 h-100">
+                                <h5 class="fw-bold text-gold">Step 3</h5>
+                                <p>Review insights and export reports with one click.</p>
+                            </div>
                         </div>
                     </div>
-
-                    <input type="text" class="form-control mb-3" id="strSignUpTNumber" placeholder="T-Number" required />
-                    <div class="error-text" id="signUpTNumberError"></div>
-
-                    <input type="email" class="form-control mb-3" id="strSignUpEmail" placeholder="Email" required />
-                    <div class="error-text" id="signUpEmailError"></div>
-
-                    <div class="input-group mb-3">
-                        <input type="password" id="strSignUpPassword" class="form-control"
-                            placeholder="Enter your password" required />
-                    </div>
-                    <div class="error-text" id="signUpPasswordError"></div>
-
-                    <div class="input-group mb-3">
-                        <input type="password" id="strSignUpConfirmPassword" class="form-control"
-                            placeholder="Confirm Password" required />
-                    </div>
-                    <div class="error-text" id="signUpConfirmPasswordError"></div>
-
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="termsSignUp" checked />
-                        <label class="form-check-label">I agree to the
-                            <a class="text-purple">Terms & Conditions</a></label>
-                    </div>
-
-                    <button id="btnSignUp" type="submit" class="btn btn-purple w-100">
-                        Create account
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Card -->
-    <div id="loginCard" class="container-fluid py-4" style="display: none">
-        <div class="container-card row g-0 fade-in">
-            <!-- Left Panel -->
-            <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
-                <div>
-                    <h2 class="fw-bold">TTU</h2>
-                    <div class="logo-image"></div>
                 </div>
-                <button id="btnLoginBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0">
-                    Back to website
-                </button>
-            </div>
+            </section>
+        </main>
 
-            <!-- Right Panel (Login Form) -->
-            <div class="col-md-9 col-lg-9 p-4">
-                <button id="btnCloseLogin" class="btn-close position-absolute top-0 end-0 m-3"></button>
-                <h1 class="fw-bold">Login</h1>
-                <p>
-                    Don't have an account?
-                    <a href="#" class="text-purple" id="btnShowSignUp1">Sign Up</a>
-                </p>
-
-                <form id="loginForm">
-                    <div class="input-group mb-3">
-                        <input type="text" id="strLoginUsername" class="form-control" placeholder="Username" required />
+        <!-- Sign Up Card-->
+        <div id="signUpCard" class="container-fluid py-4" style="display: none">
+            <div class="container-card row g-0 fade-in">
+                <!-- Left Panel -->
+                <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
+                    <div>
+                        <h2 class="fw-bold">TTU</h2>
+                        <div class="logo-image"></div>
                     </div>
-
-                    <div class="input-group mb-3">
-                        <input type="password" id="strLoginPassword" class="form-control" placeholder="Enter your password"
-                            required />
-                    </div>
-                    <div class="error-text" id="loginPasswordError"></div>
-
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="termsLogin" checked />
-                        <label class="form-check-label">I agree to the
-                            <a class="text-purple">Terms & Conditions</a></label>
-                    </div>
-
-                    <button id="btnLogin" type="submit" class="btn btn-purple w-100">
-                        Login
+                    <button id="btnSignBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0">
+                        Back to website
                     </button>
-                </form>
+                </div>
+
+                <!-- Right Panel (Sign Up Form) -->
+                <div class="col-md-9 col-lg-9 p-4">
+                    <button id="btnCloseSignUp" class="btn-close position-absolute top-0 end-0 m-3"></button>
+                    <h1 class="fw-bold">Create an account</h1>
+                    <p>
+                        Already have an account?
+                        <a href="#" class="text-purple" id="btnShowLogin1">Log in</a>
+                    </p>
+
+                    <form id="signUpForm">
+                        <input type="text" class="form-control mb-3" id="strSignUpUsername" placeholder="Username"
+                            required />
+                        <div class="error-text" id="signUpUsernameError"></div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <input type="text" class="form-control" id="strSignUpFirstName" placeholder="First name"
+                                    required />
+                                <div class="error-text" id="signUpFirstNameError"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control" id="strSignUpLastName" placeholder="Last name"
+                                    required />
+                                <div class="error-text" id="signUpLastNameError"></div>
+                            </div>
+                        </div>
+
+                        <input type="text" class="form-control mb-3" id="strSignUpTNumber" placeholder="T-Number"
+                            required />
+                        <div class="error-text" id="signUpTNumberError"></div>
+
+                        <input type="email" class="form-control mb-3" id="strSignUpEmail" placeholder="Email"
+                            required />
+                        <div class="error-text" id="signUpEmailError"></div>
+
+                        <div class="input-group mb-3">
+                            <input type="password" id="strSignUpPassword" class="form-control"
+                                placeholder="Enter your password" required />
+                        </div>
+                        <div class="error-text" id="signUpPasswordError"></div>
+
+                        <div class="input-group mb-3">
+                            <input type="password" id="strSignUpConfirmPassword" class="form-control"
+                                placeholder="Confirm Password" required />
+                        </div>
+                        <div class="error-text" id="signUpConfirmPasswordError"></div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="termsSignUp" checked />
+                            <label class="form-check-label">I agree to the
+                                <a class="text-purple">Terms & Conditions</a></label>
+                        </div>
+
+                        <button id="btnSignUp" type="submit" class="btn btn-purple w-100">
+                            Create account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Card -->
+        <div id="loginCard" class="container-fluid py-4" style="display: none">
+            <div class="container-card row g-0 fade-in">
+                <!-- Left Panel -->
+                <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
+                    <div>
+                        <h2 class="fw-bold">TTU</h2>
+                        <div class="logo-image"></div>
+                    </div>
+                    <button id="btnLoginBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0">
+                        Back to website
+                    </button>
+                </div>
+
+                <!-- Right Panel (Login Form) -->
+                <div class="col-md-9 col-lg-9 p-4">
+                    <button id="btnCloseLogin" class="btn-close position-absolute top-0 end-0 m-3"></button>
+                    <h1 class="fw-bold">Login</h1>
+                    <p>
+                        Don't have an account?
+                        <a href="#" class="text-purple" id="btnShowSignUp1">Sign Up</a>
+                    </p>
+
+                    <form id="loginForm">
+                        <div class="input-group mb-3">
+                            <input type="text" id="strLoginUsername" class="form-control" placeholder="Username"
+                                required />
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input type="password" id="strLoginPassword" class="form-control"
+                                placeholder="Enter your password" required />
+                        </div>
+                        <div class="error-text" id="loginPasswordError"></div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="termsLogin" checked />
+                            <label class="form-check-label">I agree to the
+                                <a class="text-purple">Terms & Conditions</a></label>
+                        </div>
+
+                        <button id="btnLogin" type="submit" class="btn btn-purple w-100">
+                            Login
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    <footer class="container-fluid text-center mt-5 py-3 border-top border-secondary">
-        <p class="mb-2">Supported by:</p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap partners">
-            <span>Noah</span>
-            <span>Aiden</span>
-            <span>Matthew</span>
-            <span>Trigg</span>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold text-white">Group Evaluations</h5>
+                    <p>Our service simplifies the process of evaluating peers in group projects—quick, fair, and
+                        insightful.</p>
+                    <p class="mt-2">© 2025 Group Evaluations. All rights reserved.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h6>Legal</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h6>Supported by:</h6>
+                    <div class="partners">
+                        <span>Noah</span>
+                        <span>Aiden</span>
+                        <span>Matthew</span>
+                        <span>Trigg</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
-</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/temp.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.addEventListener('scroll', () => {
+            const navbarContainer = document.getElementById('navbarContainer');
+            if (window.scrollY > 50) {
+                navbarContainer.classList.add('shrunk');
+            } else {
+                navbarContainer.classList.remove('shrunk');
+            }
+        });
+    </script>
+    <script src="../js/temp.js"></script>
 </body>
 
 </html>

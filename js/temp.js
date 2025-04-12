@@ -66,13 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    document.getElementById("loginForm").addEventListener("submit", function (event) {
+    document.getElementById("loginForm").addEventListener("submit", async function (event) {
         event.preventDefault();
         clearErrors();
         let valid = true;
 
-        let username = document.getElementById("loginUsername").value.trim();
-        let password = document.getElementById("loginPassword").value;
+        let username = document.getElementById("strLoginUsername").value.trim();
+        let password = document.getElementById("strLoginPassword").value;
 
         if (username === "") {
             showError("loginUsername", "Username is required.");
@@ -86,7 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!valid) {
             Swal.fire({ icon: "error", title: "Login Failed", text: "Please enter valid credentials." });
         } else {
-            Swal.fire({ icon: "success", title: "Welcome Back!", text: "Login successful." });
+            await Swal.fire({ icon: "success", title: "Welcome Back!", text: "Login successful." });
+            window.location.href = "dashboard.html";
         }
     });
 

@@ -5,12 +5,13 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const pool = require("./db");
 const { v4: uuidv4 } = require("uuid");
-import cookieParser from "cookie-parser";
+const cookieParser = require("cookie-parser");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
@@ -25,13 +26,52 @@ async function hashPassword(password) {
     return await bcrypt.hash(password, 10);
 }
 
+//Validate the Session
+async function isValidSession(sessionID, userID) {
+    //Make sure the session exists
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+    //Validate the session
+    const result = await connection.execute(
+      "SELECT * FROM tblSession WHERE sessionID = ? AND expiresAt > NOW()",
+        [sessionID]
+    );
+
+    //Check to see if there is a user with this session
+    const userSessionResult = await connection.execute("SELECT * FROM tblUser WHERE sessionID = ? AND userID = ?", [sessionID, userID]);
+    if(userSessionResult.length === 0){
+        return false;
+    }
+    
+    //If the session doesn't exist
+    if (result.length === 0 /*|| userSessionResult === 0*/) {
+        return false;
+    } else {
+      //Update the last activity
+        await connection.execute(
+        "UPDATE tblSession SET expiresAt = NOW() + INTERVAL 5 MINUTE WHERE sessionID = ?",
+        [sessionID]
+        );
+      //Return true if the check
+        return true;
+    }
+    } catch (error) {
+        console.error("Error checking session", error);
+        return false;
+    } finally {
+        if (connection) connection.release();
+    }  
+}
+
 //To make sure the api works
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
 //Signup Route
-app.post("/signup", async (req, res) => {
+app.post("/api/signup", async (req, res) => {
     //What should be passed in
     const { username, fname, lname, tNumber, email, password, confirmPassword } = req.body;
     const userID = uuidv4();
@@ -62,6 +102,7 @@ app.post("/signup", async (req, res) => {
     let connection;
     try {
         connection = await pool.getConnection();
+        console.log("Connected to the database.");
 
         //Check if the username is already in use
         try {
@@ -96,7 +137,7 @@ app.post("/signup", async (req, res) => {
 });
 
 //Login Route
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
 
     //Salt and Hash the Password

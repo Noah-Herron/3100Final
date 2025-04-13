@@ -93,32 +93,59 @@
 </div>
 
 <!-- Add an Anouncement -->
-<div id="addActivityCard" style="display: none;">
+<div id="addActivityCard" class="w-50" style="display: none; position: fixed; top: 10%; left: 50%; transform: translateX(-50%); z-index: 1050; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3); border-radius: 8px">
     <div class="card">
         <div class="card-header">
-            <h5>Add Activity!</h5>
-            <button type="button" class="btn-close" id="closeAddActivityCard" aria-label="Close"></button>
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>Add Activity!</h3>
+                </div>
+                <div class="col-md-2 justify-content-end d-flex align-items-center">
+                    <button type="button" class="btn-close" id="closeAddActivityCard" aria-label="Close"></button>
+                </div>
+            </div>
         </div>
-        <hr>
-        <div class="card-body">
+        <div class="card-body mt-2">
             <form id="activityForm">
                 <div class="mb-3">
                     <label for="activityTitle" class="form-label">Activity Title</label>
                     <input type="text" class="form-control" id="activityTitle" required>
                 </div>
-                <div class="mb-3">
-                    <label for="activityType" class="form-label">Type</label>
-                    <input type="text" class="form-control" id="activityType" required>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="activityType" class="form-label">Type</label>
+                        <select class="form-select" id="activityTypeSelect" required>
+                            <option value="" disabled selected>Select type</option>
+                            <option value="assignment">Assignment</option>
+                            <option value="survey">Survey</option>
+                            <option value="announcement">Announcement</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="activityClass" class="form-label">Class</label>
+                        <select class="form-select" id="activityClassSelect" required>
+                            <option value="" disabled selected>Select class</option>
+                            <option value="CSC 3100">CSC 3100</option>
+                            <option value="CSC 3200">CSC 3200</option>
+                            <option value="CSC 3300">CSC 3300</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="activityClass" class="form-label">Class</label>
-                    <input type="text" class="form-control" id="activityClass" required>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="activityPostedDate" class="form-label">Posted Date</label>
+                        <input type="date" class="form-control" id="activityPostedDate" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="activityDueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="activityDueDate" required>
+                    </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 mt-3">
                     <label for="activityDescription" class="form-label">Description</label>
                     <textarea class="form-control" id="activityDescription" rows="3" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Activity</button>
+                <button id="submitActivityButton" type="submit" class="btn btn-primary">Add Activity</button>
             </form>
         </div>
     </div>

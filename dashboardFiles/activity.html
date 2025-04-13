@@ -1,0 +1,125 @@
+<!-- Main HTML -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Activity:</h1>
+    <button class="btn btn-primary btn-lg" id="addActivityButton">
+        <i class="bi bi-plus"></i>
+    </button>
+</div>
+<div class="d-flex flex-column gap-3">
+    <a href="#" class="text-decoration-none mt-2">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+    <a href="#" class="text-decoration-none mt-2">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+    <a href="#" class="text-decoration-none mt-2">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+    <a href="#" class="text-decoration-none mt-2">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+</div>
+
+<!-- Add an Anouncement -->
+<div id="addActivityCard" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            <h5>Add Activity!</h5>
+            <button type="button" class="btn-close" id="closeAddActivityCard" aria-label="Close"></button>
+        </div>
+        <hr>
+        <div class="card-body">
+            <form id="activityForm">
+                <div class="mb-3">
+                    <label for="activityTitle" class="form-label">Activity Title</label>
+                    <input type="text" class="form-control" id="activityTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label for="activityType" class="form-label">Type</label>
+                    <input type="text" class="form-control" id="activityType" required>
+                </div>
+                <div class="mb-3">
+                    <label for="activityClass" class="form-label">Class</label>
+                    <input type="text" class="form-control" id="activityClass" required>
+                </div>
+                <div class="mb-3">
+                    <label for="activityDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="activityDescription" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Activity</button>
+            </form>
+        </div>
+    </div>
+</div>

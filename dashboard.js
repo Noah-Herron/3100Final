@@ -9,10 +9,10 @@ const contentMap = {
         const activityResponse = await fetch('/dashboardFiles/activity.html');
         return await activityResponse.text();
     },
-    classes: `
-        <h2>Classes</h2>
-        <p>This is your classes section.</p>
-    `,
+    classes: async () => {
+        const classesResponse = await fetch('/dashboardFiles/classes.html');
+        return await classesResponse.text();
+    },
     assignments: `
         <h2>Assignments</h2>
         <p>This is your assignments section.</p>
@@ -52,6 +52,10 @@ async function loadContent(page) {
 
     if (page === 'activity') {
         addActivityListeners();
+    }
+
+    if (page === 'classes') {
+        addClassListeners();
     }
 }
 
@@ -94,6 +98,43 @@ function addActivityListeners() {
         }
     });
 };
+
+function addClassListeners() {
+    const addClassButton = document.getElementById('addClassButton');
+    const addClassCard = document.getElementById('addClassCard');
+    const closeAddClassCard = document.getElementById('closeAddClassCard');
+    const submitClassButton = document.getElementById('submitClassButton');
+
+    addClassButton.addEventListener('click', () => {
+        console.log('Add Class button clicked');
+        addClassCard.style.display = 'block';
+    });
+    
+    closeAddClassCard.addEventListener('click', () => {
+        addClassCard.style.display = 'none';
+    });
+
+    submitClassButton.addEventListener('click', async () => {
+        const className = document.getElementById('className').value;
+        const classCode = document.getElementById('classCode').value;
+        const classDescription = document.getElementById('classDescription').value;
+
+        if (className && classCode && classDescription) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Class Added',
+                text: `Class "${className}" has been added.`,
+            });
+            addClassCard.style.display = 'none';
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all fields.',
+            });
+        }
+    });
+}
 
 document.querySelectorAll('.nav-link').forEach((link) => {
     link.addEventListener('click', async function (e) {

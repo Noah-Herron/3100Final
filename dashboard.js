@@ -103,7 +103,8 @@ function addClassListeners() {
     const addClassButton = document.getElementById('addClassButton');
     const addClassCard = document.getElementById('addClassCard');
     const closeAddClassCard = document.getElementById('closeAddClassCard');
-    const submitClassButton = document.getElementById('submitClassButton');
+    const submitJoinClassButton = document.getElementById('submitJoinClassButton');
+    const submitCreateClassButton = document.getElementById('submitClassButton');
 
     addClassButton.addEventListener('click', () => {
         console.log('Add Class button clicked');
@@ -114,16 +115,40 @@ function addClassListeners() {
         addClassCard.style.display = 'none';
     });
 
-    submitClassButton.addEventListener('click', async () => {
-        const className = document.getElementById('className').value;
+    submitJoinClassButton.addEventListener('click', async () => {
         const classCode = document.getElementById('classCode').value;
-        const classDescription = document.getElementById('classDescription').value;
 
-        if (className && classCode && classDescription) {
+        if (classCode) {
             await Swal.fire({
                 icon: 'success',
-                title: 'Class Added',
-                text: `Class "${className}" has been added.`,
+                title: 'Class Joined',
+                text: `You have joined the class with code "${classCode}".`,
+            });
+            addClassCard.style.display = 'none';
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please enter a class code.',
+            });
+        }
+    });
+
+    submitCreateClassButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('classTitle').value;
+        const type = document.getElementById('classTypeSelect').value;
+        const className = document.getElementById('classClassSelect').value;
+        const potedDate = document.getElementById('classPostedDate').value;
+        const dueDate = document.getElementById('classDueDate').value;
+        const description = document.getElementById('classDescription').value;
+
+        if(title && type && className && potedDate && dueDate && description) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Class Created',
+                text: `Class "${className}" has been created.`,
             });
             addClassCard.style.display = 'none';
         } else {
@@ -133,6 +158,23 @@ function addClassListeners() {
                 text: 'Please fill in all fields.',
             });
         }
+
+        document.getElementById('classForm').reset;
+    });
+
+    document.querySelectorAll('.class-card').forEach((card) => {
+        card.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const classId = card.getAttribute('data-class-id');
+            console.log(`Class card clicked: ${classId}`);
+
+            const res = await fetch('/dashboardFiles/individualClass.html');
+            const html = await res.text();
+
+            const main = document.getElementById('main-content');
+            main.innerHTML = html;
+        });
     });
 }
 

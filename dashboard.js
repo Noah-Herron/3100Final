@@ -167,13 +167,39 @@ function addClassListeners() {
             e.preventDefault();
 
             const classId = card.getAttribute('data-class-id');
-            console.log(`Class card clicked: ${classId}`);
 
             const res = await fetch('/dashboardFiles/individualClass.html');
             const html = await res.text();
 
             const main = document.getElementById('main-content');
             main.innerHTML = html;
+
+            const addStudentBtn = document.getElementById('btnAddStudents');
+            if (addStudentBtn) {
+                addStudentBtn.addEventListener('click', async () => {
+                    await Swal.fire({
+                        icon: 'info',
+                        title: 'Add Students',
+                        text: 'Student Code: TNTECH-CSC-3100-001-12345'
+                });
+            })};
+
+            const addGroupBtn = document.getElementById('btnAddGroups');
+            if (addGroupBtn) {
+                addGroupBtn.addEventListener('click', async () => {
+                    await Swal.fire({
+                        icon: 'info',
+                        title: 'Add Groups',
+                        text: 'Group Code: TNTECH-CSC-3100-001-G1-12345'
+                });
+            })};
+
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.addEventListener('click', () => {
+                    loadContent('classes');
+                });
+            }
         });
     });
 }

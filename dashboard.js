@@ -59,6 +59,7 @@ function addActivityListeners() {
     const addActivityButton = document.getElementById('addActivityButton');
     const addActivityCard = document.getElementById('addActivityCard');
     const closeAddActivityCard = document.getElementById('closeAddActivityCard');
+    const submitActivityButton = document.getElementById('submitActivityButton');
 
     addActivityButton.addEventListener('click', () => {
         console.log('Add Activity button clicked');
@@ -68,7 +69,31 @@ function addActivityListeners() {
     closeAddActivityCard.addEventListener('click', () => {
         addActivityCard.style.display = 'none';
     });
-}
+
+    submitActivityButton.addEventListener('click', async () => {
+        const activityTitle = document.getElementById('activityTitle').value;
+        const activityType = document.getElementById('activityTypeSelect').value;
+        const activityClass = document.getElementById('activityClassSelect').value;
+        const activityPostedDate = document.getElementById('activityPostedDate').value;
+        const activityEndDate = document.getElementById('activityDueDate').value;
+        const activityDescription = document.getElementById('activityDescription').value;
+
+        if (activityTitle && activityType && activityClass && activityPostedDate && activityEndDate && activityDescription) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Activity Added',
+                text: `Activity "${activityName}" has been added.`,
+            });
+            addActivityCard.style.display = 'none';
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all fields.',
+            });
+        }
+    });
+};
 
 document.querySelectorAll('.nav-link').forEach((link) => {
     link.addEventListener('click', async function (e) {

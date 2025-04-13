@@ -13,13 +13,13 @@ const contentMap = {
         const classesResponse = await fetch('/dashboardFiles/classes.html');
         return await classesResponse.text();
     },
-    assignments: `
-        <h2>Assignments</h2>
-        <p>This is your assignments section.</p>
-    `,
-    messages: `
-        <h2>Messages</h2>
-        <p>This is your messages section.</p>
+    assignments: async () => {
+        const classesResponse = await fetch('/dashboardFiles/assignments.html');
+        return await classesResponse.text();
+    },
+    groups: `
+        <h2>Groups</h2>
+        <p>This is your groups section.</p>
     `,
     resources: `
         <h2>Resources</h2>
@@ -56,6 +56,10 @@ async function loadContent(page) {
 
     if (page === 'classes') {
         addClassListeners();
+    }
+
+    if (page === 'assignments') {
+        addAssignmentListeners();
     }
 }
 
@@ -107,7 +111,6 @@ function addClassListeners() {
     const submitCreateClassButton = document.getElementById('submitClassButton');
 
     addClassButton.addEventListener('click', () => {
-        console.log('Add Class button clicked');
         addClassCard.style.display = 'block';
     });
     
@@ -201,6 +204,139 @@ function addClassListeners() {
                 });
             }
         });
+    });
+}
+
+function addAssignmentListeners() {
+    const addAssignmentButton = document.getElementById('addAssignmentButton');
+    const addAssignmentCard = document.getElementById('addAssignmentCard');
+    const closeAddAssignmentCard = document.getElementById('closeAddAssignmentCard');
+    const submitAssignmentButton = document.getElementById('submitAssignmentButton');
+
+    addAssignmentButton.addEventListener('click', () => {
+        addAssignmentCard.style.display = 'block';
+    });
+
+    closeAddAssignmentCard.addEventListener('click', () => {
+        addAssignmentCard.style.display = 'none';
+    });
+
+    //Dynamic Question Type Handling
+    const numQuestionsInput = document.getElementById('numQuestions');
+    const questionContainer = document.getElementById('questionContainer');
+
+    numQuestionsInput.addEventListener('input', () => {
+        const numQuestions = parseInt(numQuestionsInput.value);
+        questionContainer.innerHTML = ''; // Clear previous questions
+
+        for (let i = 0; i < numQuestions; i++) {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-block border p-3 mb-3 rounded';
+
+            questionDiv.innerHTML = `
+                <h5>Question ${i+1}</h5>
+                <div class="form-group mb-2">
+                    <label>Type</label>
+                    <select class="form-control question-type">
+                        <option value="multiple-choice">Multiple Choice</option>
+                        <option value="short-answer">Short Answer</option>
+                    </select>
+                </div>
+                <div class="form-group mb-2">
+                    <label>Question</label>
+                    <input type="text" class="form-control question-text" placeholder="Enter question text">
+                </div>
+                <div class="mc-section d-none">
+                    <label>Number of Options</label>
+                    <input type="number" class="form-control num-options" min="2" placeholder="Enter number of options">
+                    <div class="mc-options"></div>
+                </div>
+            `;
+
+            questionContainer.appendChild(questionDiv);
+
+            const typeSelect = questionDiv.querySelector('.question-type');
+            const mcSection = questionDiv.querySelector('.mc-section');
+            const numOptionsInput = questionDiv.querySelector('.num-options');
+            const mcOptionsContainer = questionDiv.querySelector('.mc-options');
+
+            typeSelect.addEventListener('change', () => {
+                if (typeSelect.value === 'multiple-choice') {
+                    mcSection.classList.remove('d-none');
+                } else {
+                    mcSection.classList.add('d-none');
+                    mcOptionsDiv.innerHTML = ''; // Clear options if switching to short answer
+                }
+            });
+
+            numOptionsInput.addEventListener('input', () => {
+                const numOptions = parseInt(numOptionsInput.value);
+                mcOptionsContainer.innerHTML = ''; // Clear previous options
+
+                for (let j = 1; j <= numOptions; j++) {
+                    const optionDiv = document.createElement('input');
+                    optionDiv.type = 'text';
+                    optionDiv.className = 'form-control mb-1';
+                    optionDiv.placeholder = `Option ${j}`;
+                    mcOptionsContainer.appendChild(optionDiv);
+                }
+            });
+        }
+    });
+
+    submitAssignmentButton.addEventListener('click', async () => {
+        const assignmentTitle = document.getElementById('assignmentTitle').value;
+        const questionBlocks = questionsContainer.querySelectorAll('.question-block');
+
+        if (!assignmentTitle || questionBlocks.length === 0) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all fields.',
+            });
+            return;
+        }
+
+        const questions = [];
+
+        for (let block of questionBlocks) {
+            const type = block.querySelector('.question-type').value;
+            const text = block.querySelector('.question-text').value;
+            let options = [];
+
+            if (type === 'multiple-choice') {
+                const optionInputes = block.querySelectorAll('.mc-options input');
+                options = Array.from(optionsInputs).map(option => option.value.trim()).filter(Boolean);
+
+                if(options.length < 2) {
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Multiple choice questions must have at least 2 options.',
+                    });
+                    return;
+                }
+            }
+
+            if(!text) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please fill in all fields.',
+                });
+                return;
+            }
+
+            questions.push({ type, text, options });
+        }
+
+        await Swal.fire({
+            icon: 'success',
+            title: 'Assignment Created',
+            text: `Assignment "${assignmentTitle}" has been created.`,
+        });
+
+        addAssignmentCard.style.display = 'none';
     });
 }
 

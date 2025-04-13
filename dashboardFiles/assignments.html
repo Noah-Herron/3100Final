@@ -1,7 +1,7 @@
-<!-- Main HTML -->
+<!-- Assignments HTML -->
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Activity:</h1>
-    <button class="btn btn-primary btn-lg" id="addActivityButton">
+    <h1>Assignments:</h1>
+    <button class="btn btn-primary btn-lg" id="addAssignmentButton">
         <i class="bi bi-plus"></i>
     </button>
 </div>
@@ -32,10 +32,10 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <h5 class="card-title">Survey for Project 3</h5>
+                        <h5 class="card-title">Survey for Project 1</h5>
                     </div>
                     <div class="col-md-3">
-                        <h5 class="card-title">Class: CSC 4100</h5>
+                        <h5 class="card-title">Class: CSC 3100</h5>
                     </div>
                     <div class="col-md-3">
                         <h5 class="card-title">Posted: 2023-10-10</h5>
@@ -44,7 +44,7 @@
                         <h5 class="card-title">Due: 2023-10-15</h5>
                     </div>
                 </div>
-                <p class="card-text">This is a survey of team members for group project 3.</p>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
             </div>
         </div>
     </a>
@@ -53,7 +53,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <h5 class="card-title">No class 3/15</h5>
+                        <h5 class="card-title">Survey for Project 1</h5>
                     </div>
                     <div class="col-md-3">
                         <h5 class="card-title">Class: CSC 3100</h5>
@@ -61,8 +61,11 @@
                     <div class="col-md-3">
                         <h5 class="card-title">Posted: 2023-10-10</h5>
                     </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
                 </div>
-                <p class="card-text">Due to sickness, no class.</p>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
             </div>
         </div>
     </a>
@@ -71,56 +74,56 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <h5 class="card-title">Survey for Project 3</h5>
+                        <h5 class="card-title">Survey for Project 1</h5>
                     </div>
                     <div class="col-md-3">
-                        <h5 class="card-title">Class: CSC 4100</h5>
+                        <h5 class="card-title">Class: CSC 3100</h5>
                     </div>
                     <div class="col-md-3">
                         <h5 class="card-title">Posted: 2023-10-10</h5>
                     </div>
                     <div class="col-md-3">
-                        <h5 class="card-title">Due: 2023-10-25</h5>
+                        <h5 class="card-title">Due: 2023-10-15</h5>
                     </div>
                 </div>
-                <p class="card-text">The due date for the survey has been increased to the 25th.</p>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
             </div>
         </div>
     </a>
 </div>
 
-<!-- Add an Anouncement -->
-<div id="addActivityCard" class="w-50" style="display: none; position: fixed; top: 3%; left: 50%; transform: translateX(-50%); z-index: 1050; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3); border-radius: 8px; max-height: 90vh; overflow-y: auto;">
+<!-- Add Assignment -->
+<div id="addAssignmentCard" class="w-50" style="display: none; position: fixed; top: 3%; left: 50%; transform: translateX(-50%); z-index: 1050; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3); border-radius: 8px; max-height: 90vh; overflow-y: auto;">
     <div class="card">
         <div class="card-header">
             <div class="row">
                 <div class="col-md-10">
-                    <h3>Add Activity!</h3>
+                    <h3>Add Assignment!</h3>
                 </div>
                 <div class="col-md-2 justify-content-end d-flex align-items-center">
-                    <button type="button" class="btn-close" id="closeAddActivityCard" aria-label="Close"></button>
+                    <button type="button" class="btn-close" id="closeAddAssignmentCard" aria-label="Close"></button>
                 </div>
             </div>
         </div>
         <div class="card-body mt-2">
-            <form id="activityForm">
+            <form id="AssignmentForm">
                 <div class="mb-3">
-                    <label for="activityTitle" class="form-label">Activity Title</label>
-                    <input type="text" class="form-control" id="activityTitle" required>
+                    <label for="AssignmentTitle" class="form-label">Assignment Title</label>
+                    <input type="text" class="form-control" id="AssignmentTitle" required>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="activityType" class="form-label">Type</label>
-                        <select class="form-select" id="activityTypeSelect" required>
+                        <label for="AssignmentType" class="form-label">Type</label>
+                        <select class="form-select" id="AssignmentTypeSelect" required>
                             <option value="" disabled selected>Select type</option>
-                            <option value="assignment">Assignment</option>
+                            <option value="Assignment">Assignment</option>
                             <option value="survey">Survey</option>
                             <option value="announcement">Announcement</option>
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="activityClass" class="form-label">Class</label>
-                        <select class="form-select" id="activityClassSelect" required>
+                        <label for="AssignmentClass" class="form-label">Class</label>
+                        <select class="form-select" id="AssignmentClassSelect" required>
                             <option value="" disabled selected>Select class</option>
                             <option value="CSC 3100">CSC 3100</option>
                             <option value="CSC 3200">CSC 3200</option>
@@ -130,20 +133,25 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-6">
-                        <label for="activityPostedDate" class="form-label">Posted Date</label>
-                        <input type="date" class="form-control" id="activityPostedDate" required>
+                        <label for="AssignmentPostedDate" class="form-label">Posted Date</label>
+                        <input type="date" class="form-control" id="AssignmentPostedDate" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="activityDueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="activityDueDate" required>
+                        <label for="AssignmentDueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="AssignmentDueDate" required>
                     </div>
                 </div>
                 <div class="mb-3 mt-3">
-                    <label for="activityDescription" class="form-label">Description</label>
-                    <textarea class="form-control" id="activityDescription" rows="3" required></textarea>
+                    <label for="AssignmentDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="AssignmentDescription" rows="3" required></textarea>
                 </div>
-                <button id="submitActivityButton" type="submit" class="btn btn-primary">Add Activity</button>
+                <hr>
+                <h5>Add a Question!</h5>
+                <label for="numQuestions" class="form-label">Number of Questions</label>
+                <input type="number" class="form-control" id="numQuestions" min="1" required>
+                <div id="questionContainer"></div>
             </form>
+            <button class="btn btn-primary" id="submitAssignmentButton">Submit Assignment!</button>
         </div>
     </div>
 </div>

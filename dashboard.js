@@ -1,60 +1,14 @@
 /* This is where we dynamically load the content for the dashboard */
 
 const contentMap = {
-    profile: `
-        <h1>Profile:</h1>
-        <div style="text-align: center; margin-top: 20px;">
-            <img src="/images/defaultProfile.png" alt="Profile Picture" style="max-width: 200px; height: 150px; border-radius: 50%;">
-            <h1 class="mt-2">John Doe</h1>
-            <div class="row mt-3 fs-4 justify-content-center">
-                <div class="col-md-5">
-                    <p>Username: johndoe</p>
-                </div>
-                <div class="col-md-5">
-                    <p>T-Number: T12345678</p>
-                </div>
-            </div>
-            <div class="row mt-3 fs-4 justify-content-center">
-                <div class="col-md-5">
-                    <p>Email: johndoe@ourteam.com</p>
-                </div>
-                <div class="col-md-5">
-                    <p>Phone: (123) 456-7890</p>
-                </div>
-            </div>
-            <div class="row mt-3 fs-4 justify-content-center">
-                <div class="col-md-5">
-                    <p>Major: Computer Science</p>
-                </div>
-                <div class="col-md-5">
-                    <p>Minor(s): Mathematics</p>
-                </div>
-            </div>
-            <div class="row mt-3 fs-4 justify-content-center">
-                <div class="col-md-5">
-                    <p>Instructor of 2 classes</p>
-                </div>
-                <div class="col-md-5">
-                    <p>Member of 5 classes</p>
-                </div>
-            </div>
-            <div class="row mt-3 fs-4 justify-content-center">
-                <div class="col-md-5">
-                    <p>Primary work location: Bruner 543</p>
-                </div>
-                <div class="col-md-5">
-                    <p>Primary available hours: MWF 2-4 PM</p>
-                </div>
-            </div>
-            <p class="fs-4 mt-3">Bio: Aspiring software engineer with a passion for web development.</p>
-            <button class="btn btn-primary mt-3 fs-3 me-3" id="editProfileBtn">Edit Profile</button>
-            <button class="btn btn-danger mt-3 fs-3" id="deleteProfileBtn">Delete Profile</button>
-        </div>
-    `,
-    activity: `
-        <h2>Activity</h2>
-        <p>This is your activity section.</p>
-    `,
+    profile: async () => {
+        const profileResponse = await fetch('/dashboardFiles/profile.html');
+        return await profileResponse.text();
+    },
+    activity: async () => {
+        const activityResponse = await fetch('/dashboardFiles/activity.html');
+        return await activityResponse.text();
+    },
     classes: `
         <h2>Classes</h2>
         <p>This is your classes section.</p>
@@ -85,11 +39,45 @@ const contentMap = {
     `,
 };
 
-document.querySelectorAll('[data-page]').forEach((link) => {
-    link.addEventListener('click', function (e) {
-        e.preventDefault();
-        const page = this.getAttribute('data-page');
-        const content = contentMap[page] || '<p>Page not found.</p>';
-        document.getElementById('main-content').innerHTML = content;
+async function loadContent(page) {
+    const contentLoader = contentMap[page] || '<p>Page not found.</p>';
+    
+    let content;
+    if (typeof contentLoader === 'function') {
+        content = await contentLoader();
+    } else {
+        content = contentLoader;
+    }
+    document.getElementById('main-content').innerHTML = content;
+
+    if (page === 'activity') {
+        addActivityListeners();
+    }
+}
+
+function addActivityListeners() {
+    const addActivityButton = document.getElementById('addActivityButton');
+    const addActivityCard = document.getElementById('addActivityCard');
+    const closeAddActivityCard = document.getElementById('closeAddActivityCard');
+
+    addActivityButton.addEventListener('click', () => {
+        console.log('Add Activity button clicked');
+        addActivityCard.style.display = 'block';
     });
+    
+    closeAddActivityCard.addEventListener('click', () => {
+        addActivityCard.style.display = 'none';
+    });
+}
+
+document.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const page = link.getAttribute('data-page');
+        loadContent(page);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    loadContent('profile'); // Load the default page
 });

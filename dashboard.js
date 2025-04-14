@@ -338,6 +338,28 @@ function addAssignmentListeners() {
 
         addAssignmentCard.style.display = 'none';
     });
+
+    document.querySelectorAll('.class-card').forEach((assignment) => {
+        console.log('Assignment card clicked');
+        assignment.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const assignmentId = assignment.getAttribute('data-class-id');
+
+            const res = await fetch('/dashboardFiles/individualAssignment.html');
+            const html = await res.text();
+
+            const main = document.getElementById('main-content');
+            main.innerHTML = html;
+
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.addEventListener('click', () => {
+                    loadContent('assignments');
+                });
+            }
+        });
+    });
 }
 
 document.querySelectorAll('.nav-link').forEach((link) => {

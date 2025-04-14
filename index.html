@@ -237,6 +237,20 @@ git <!DOCTYPE html>
             transform: scale(1.1);
             background: rgba(255, 255, 255, 0.2);
         }
+        .nav-button {
+            background: none;
+            border: 2px solid transparent; /* Set consistent border size */
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+            color: white;
+        }
+
+        .nav-button:hover {
+            border-color: var(--gold);
+            background-color: rgba(0, 0, 0, 0.386);
+        }
     </style>
 </head>
 
@@ -245,13 +259,13 @@ git <!DOCTYPE html>
         <nav class="navbar navbar-expand-lg navbar-light justify-content-center" id="mainNavbar">
             <div class="container d-flex flex-column align-items-center">
                 <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 w-100" id="navbarContent">
-                    <ul class="nav justify-content-center">
-                        <li class="nav-item"><a href="#" class="nav-link text-white">Home</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-white">Assets</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-white">Features</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-white">Pricing</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-white">FAQ</a></li>
-                    </ul>
+                    <div class="nav justify-content-center d-flex flex-wrap gap-3">
+                        <button class="nav-button">Home</button>
+                        <button class="nav-button">Assets</button>
+                        <button class="nav-button">Features</button>
+                        <button class="nav-button">Pricing</button>
+                        <button class="nav-button">FAQ</button>
+                    </div>
                     <div class="auth-buttons d-flex flex-wrap">
                         <button class="btn btn-purple me-2" id="btnShowLogin">Login</button>
                         <button class="btn btn-white" id="btnShowSignUp">Create Account</button>

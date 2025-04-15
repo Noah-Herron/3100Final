@@ -25,10 +25,10 @@ const contentMap = {
         <h2>Resources</h2>
         <p>This is your resources section.</p>
     `,
-    grades: `
-        <h2>Grades</h2>
-        <p>This is your grades section.</p>
-    `,
+    grades: async () => {
+        const gradesResponse = await fetch('/dashboardFiles/grades.html');
+        return await gradesResponse.text();
+    },
     calendar: `
         <h2>Calendar</h2>
         <p>This is your calendar section.</p>
@@ -80,6 +80,10 @@ async function loadContent(page) {
 
     if (page === 'assignments') {
         addAssignmentListeners();
+    }
+
+    if (page === 'grades') {
+        addGradesListeners();
     }
 }
 
@@ -360,7 +364,6 @@ function addAssignmentListeners() {
     });
 
     document.querySelectorAll('.class-card').forEach((assignment) => {
-        console.log('Assignment card clicked');
         assignment.addEventListener('click', async (e) => {
             e.preventDefault();
 
@@ -381,6 +384,29 @@ function addAssignmentListeners() {
         });
     });
 }
+
+function addGradesListeners() {
+    document.querySelectorAll('.class-card').forEach((grade) => {
+        grade.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const gradeId = grade.getAttribute('data-class-id');
+
+            const res = await fetch('/dashboardFiles/individualGrades.html');
+            const html = await res.text();
+
+            const main = document.getElementById('main-content');
+            main.innerHTML = html;
+
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.addEventListener('click', () => {
+                    loadContent('grades');
+                });
+            }
+        });
+    });
+};
 
 document.querySelectorAll('.nav-link').forEach((link) => {
     link.addEventListener('click', async function (e) {

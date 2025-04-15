@@ -29,10 +29,10 @@ const contentMap = {
         const gradesResponse = await fetch('/dashboardFiles/grades.html');
         return await gradesResponse.text();
     },
-    calendar: `
-        <h2>Calendar</h2>
-        <p>This is your calendar section.</p>
-    `,
+    calendar: async () => {
+        const calendarResponse = await fetch('/dashboardFiles/calendar.html');
+        return await calendarResponse.text();
+    },
     settings: `
         <h2>Settings</h2>
         <p>This is your settings section.</p>
@@ -84,6 +84,10 @@ async function loadContent(page) {
 
     if (page === 'grades') {
         addGradesListeners();
+    }
+
+    if (page === 'calendar') {
+        renderCalendar();
     }
 }
 
@@ -407,6 +411,42 @@ function addGradesListeners() {
         });
     });
 };
+
+function renderCalendar() {
+    const calendarEl = document.getElementById('calendar');
+    if(!calendarEl) return; // Ensure the calendar element exists
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        themeSystem: 'bootstrap5',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+        },
+        events: [
+            {
+                title: 'Class 1',
+                start: '2023-10-01',
+                end: '2025-04-02',
+                className: 'bg-primary text-white'
+            },
+            {
+                title: 'Assignment 1',
+                start: '2025-04-03',
+                end: '2025-04-04',
+                className: 'bg-success text-white'
+            },
+            {
+                title: 'Exam 1',
+                start: '2025-04-05',
+                end: '2025-04-06',
+                className: 'bg-danger text-white'
+            }
+        ]
+    });
+    calendar.render();
+}
 
 document.querySelectorAll('.nav-link').forEach((link) => {
     link.addEventListener('click', async function (e) {

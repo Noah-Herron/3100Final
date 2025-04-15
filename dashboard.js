@@ -37,10 +37,29 @@ const contentMap = {
         <h2>Settings</h2>
         <p>This is your settings section.</p>
     `,
+    logout: async () => {
+        await Swal.fire({
+            icon: 'info',
+            title: 'Logout',
+            text: 'You have been logged out.',
+        });
+        // Simulate logout process
+        window.location.href = "index.html";
+    }
 };
 
 async function loadContent(page) {
-    const contentLoader = contentMap[page] || '<p>Page not found.</p>';
+    const contentLoader = contentMap[page];
+
+    if (!contentLoader) {
+        document.getElementById('main-content').innerHTML = `<h2>404 Not Found</h2><p>The requested page "${page}" was not found.</p>`;
+        return;
+    }
+
+    if (page === 'logout') {
+        await contentLoader();
+        return;
+    }
     
     let content;
     if (typeof contentLoader === 'function') {
@@ -48,6 +67,7 @@ async function loadContent(page) {
     } else {
         content = contentLoader;
     }
+    
     document.getElementById('main-content').innerHTML = content;
 
     if (page === 'activity') {

@@ -25,22 +25,41 @@ const contentMap = {
         <h2>Resources</h2>
         <p>This is your resources section.</p>
     `,
-    grades: `
-        <h2>Grades</h2>
-        <p>This is your grades section.</p>
-    `,
-    calendar: `
-        <h2>Calendar</h2>
-        <p>This is your calendar section.</p>
-    `,
+    grades: async () => {
+        const gradesResponse = await fetch('/dashboardFiles/grades.html');
+        return await gradesResponse.text();
+    },
+    calendar: async () => {
+        const calendarResponse = await fetch('/dashboardFiles/calendar.html');
+        return await calendarResponse.text();
+    },
     settings: `
         <h2>Settings</h2>
         <p>This is your settings section.</p>
     `,
+    logout: async () => {
+        await Swal.fire({
+            icon: 'info',
+            title: 'Logout',
+            text: 'You have been logged out.',
+        });
+        // Simulate logout process
+        window.location.href = "index.html";
+    }
 };
 
 async function loadContent(page) {
-    const contentLoader = contentMap[page] || '<p>Page not found.</p>';
+    const contentLoader = contentMap[page];
+
+    if (!contentLoader) {
+        document.getElementById('main-content').innerHTML = `<h2>404 Not Found</h2><p>The requested page "${page}" was not found.</p>`;
+        return;
+    }
+
+    if (page === 'logout') {
+        await contentLoader();
+        return;
+    }
     
     let content;
     if (typeof contentLoader === 'function') {
@@ -48,6 +67,7 @@ async function loadContent(page) {
     } else {
         content = contentLoader;
     }
+    
     document.getElementById('main-content').innerHTML = content;
 
     if (page === 'activity') {
@@ -64,6 +84,13 @@ async function loadContent(page) {
 
     if (page === 'groups') {
         addAssignmentListeners();
+    }
+    if (page === 'grades') {
+        addGradesListeners();
+    }
+
+    if (page === 'calendar') {
+        renderCalendar();
     }
 }
 
@@ -344,7 +371,6 @@ function addAssignmentListeners() {
     });
 
     document.querySelectorAll('.class-card').forEach((assignment) => {
-        console.log('Assignment card clicked');
         assignment.addEventListener('click', async (e) => {
             e.preventDefault();
 
@@ -364,6 +390,65 @@ function addAssignmentListeners() {
             }
         });
     });
+}
+
+function addGradesListeners() {
+    document.querySelectorAll('.class-card').forEach((grade) => {
+        grade.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const gradeId = grade.getAttribute('data-class-id');
+
+            const res = await fetch('/dashboardFiles/individualGrades.html');
+            const html = await res.text();
+
+            const main = document.getElementById('main-content');
+            main.innerHTML = html;
+
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.addEventListener('click', () => {
+                    loadContent('grades');
+                });
+            }
+        });
+    });
+};
+
+function renderCalendar() {
+    const calendarEl = document.getElementById('calendar');
+    if(!calendarEl) return; // Ensure the calendar element exists
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        themeSystem: 'bootstrap5',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+        },
+        events: [
+            {
+                title: 'Class 1',
+                start: '2023-10-01',
+                end: '2025-04-02',
+                className: 'bg-primary text-white'
+            },
+            {
+                title: 'Assignment 1',
+                start: '2025-04-03',
+                end: '2025-04-04',
+                className: 'bg-success text-white'
+            },
+            {
+                title: 'Exam 1',
+                start: '2025-04-05',
+                end: '2025-04-06',
+                className: 'bg-danger text-white'
+            }
+        ]
+    });
+    calendar.render();
 }
 
 document.querySelectorAll('.nav-link').forEach((link) => {

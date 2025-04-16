@@ -17,10 +17,10 @@ const contentMap = {
         const classesResponse = await fetch('/dashboardFiles/assignments.html');
         return await classesResponse.text();
     },
-    groups: `
-        <h2>Groups</h2>
-        <p>This is your groups section.</p>
-    `,
+    groups: async () => {
+        const classesResponse = await fetch('/dashboardFiles/groups.html');
+        return await classesResponse.text();
+    },
     resources: `
         <h2>Resources</h2>
         <p>This is your resources section.</p>
@@ -59,6 +59,10 @@ async function loadContent(page) {
     }
 
     if (page === 'assignments') {
+        addAssignmentListeners();
+    }
+
+    if (page === 'groups') {
         addAssignmentListeners();
     }
 }

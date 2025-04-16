@@ -1,0 +1,122 @@
+<!-- Main HTML -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Groups:</h1>
+    <button class="btn btn-primary btn-lg" id="addGroupButton">
+        <i class="bi bi-plus"></i>
+    </button>
+</div>
+<div class="row g-3">
+    <div class="col-md-6 col-lg-6">
+        <a href="#" class="text-decoration-none mt-2 group-card" data-group-id="individualGroupId">
+            <div class="card flex-row shadow-sm p-3 align-items-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="Group">Group: AI Research Team</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="Leader">Leader: John Doe</h5>
+                        </div>
+                    </div>
+                    <p class="card-text">Description: Group exploring the latest AI models.</p>
+                    <p class="card-text">Tasks Due: 7.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+        <a href="#" class="text-decoration-none mt-2 group-card" data-group-id="individualGroupId">
+            <div class="card flex-row shadow-sm p-3 align-items-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="Group">Group: Capstone Devs</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="Leader">Leader: John Doe</h5>
+                        </div>
+                    </div>
+                    <p class="card-text">Description: Working on final project.</p>
+                    <p class="card-text">Tasks Due: 1.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Add a Group -->
+<div id="addGroupCard" class="w-50" style="display: none; position: fixed; top: 3%; left: 50%; transform: translateX(-50%); z-index: 1050; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3); border-radius: 8px; max-height: 90vh; overflow-y: auto;">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>Add Group!</h3>
+                </div>
+                <div class="col-md-2 justify-content-end d-flex align-items-center">
+                    <button type="button" class="btn-close" id="closeGroupCard" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body mt-2">
+            <div class="col-md-3">
+                <h4>Join a Group:</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="groupCode" class="form-label">Group Code:</label>
+                </div>
+                <div class="col-md-5">
+                    <input type="text" class="form-control" id="groupCode" placeholder="Enter Group Code" required>
+                </div>
+                <div class="col-md-4">
+                    <button id="submitJoinGroupButton" type="submit" class="btn btn-primary">Join Group</button>
+                </div>
+            </div>
+        </div>
+        <h4 class="ms-3 mt-4">Or Create Your Own!</h4>
+        <div class="card-body">
+            <form id="groupForm">
+                <div class="mb-3">
+                    <label for="groupTitle" class="form-label">Group Title</label>
+                    <input type="text" class="form-control" id="groupTitle" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="groupType" class="form-label">Type</label>
+                        <select class="form-select" id="groupTypeSelect" required>
+                            <option value="" disabled selected>Select type</option>
+                            <option value="project">Project</option>
+                            <option value="study">Study</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="relatedClassSelect" class="form-label">Related Class</label>
+                        <select class="form-select" id="relatedClassSelect" required>
+                            <option value="" disabled selected>Select related class</option>
+                            <option value="CSC 3100">CSC 3100</option>
+                            <option value="CSC 3200">CSC 3200</option>
+                            <option value="CSC 3300">CSC 3300</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="groupPostedDate" class="form-label">Posted Date</label>
+                        <input type="date" class="form-control" id="groupPostedDate" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="groupDueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="groupDueDate" required>
+                    </div>
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="groupDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="groupDescription" rows="3" required></textarea>
+                </div>
+                <button id="submitGroupButton" type="submit" class="btn btn-primary">Create Group</button>
+            </form>
+        </div>
+    </div>
+</div>

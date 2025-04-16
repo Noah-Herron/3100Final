@@ -1,0 +1,168 @@
+<!-- Assignments HTML -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Assignments:</h1>
+    <button class="btn btn-primary btn-lg" id="addAssignmentButton">
+        <i class="bi bi-plus"></i>
+    </button>
+</div>
+<div class="d-flex flex-column gap-3">
+    <a href="#" class="text-decoration-none mt-2 class-card" data-class-id="individualAssignmentId">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+    <a href="#" class="text-decoration-none mt-2 class-card" data-class-id="individualAssignmentId">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+    <a href="#" class="text-decoration-none mt-2 class-card" data-class-id="individualAssignmentId">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+    <a href="#" class="text-decoration-none mt-2 class-card" data-class-id="individualAssignmentId">
+        <div class="card flex-row shadow-sm p-3 align-items-center">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="card-title">Survey for Project 1</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Class: CSC 3100</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Posted: 2023-10-10</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="card-title">Due: 2023-10-15</h5>
+                    </div>
+                </div>
+                <p class="card-text">This is a survey of team members for group project 1.</p>
+            </div>
+        </div>
+    </a>
+</div>
+
+<!-- Add Assignment -->
+<div id="addAssignmentCard" class="w-50" style="display: none; position: fixed; top: 3%; left: 50%; transform: translateX(-50%); z-index: 1050; background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.3); border-radius: 8px; max-height: 90vh; overflow-y: auto;">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>Add Assignment!</h3>
+                </div>
+                <div class="col-md-2 justify-content-end d-flex align-items-center">
+                    <button type="button" class="btn-close" id="closeAddAssignmentCard" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body mt-2">
+            <form id="AssignmentForm">
+                <div class="mb-3">
+                    <label for="AssignmentTitle" class="form-label">Assignment Title</label>
+                    <input type="text" class="form-control" id="AssignmentTitle" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="AssignmentType" class="form-label">Type</label>
+                        <select class="form-select" id="AssignmentTypeSelect" required>
+                            <option value="" disabled selected>Select type</option>
+                            <option value="Assignment">Assignment</option>
+                            <option value="survey">Survey</option>
+                            <option value="announcement">Announcement</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="AssignmentClass" class="form-label">Class</label>
+                        <select class="form-select" id="AssignmentClassSelect" required>
+                            <option value="" disabled selected>Select class</option>
+                            <option value="CSC 3100">CSC 3100</option>
+                            <option value="CSC 3200">CSC 3200</option>
+                            <option value="CSC 3300">CSC 3300</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <label class="form-label">Should students see the individual reviews?</label>
+                    <div class="form-check col-md-3 ms-3">
+                        <input class="form-check-input" type="radio" name="individualReview" id="individualReviewYes" value="yes" checked>
+                        <label class="form-check-label" for="individualReviewYes">Yes</label>
+                    </div>
+                    <div class="form-check col-md-3">
+                        <input class="form-check-input" type="radio" name="individualReview" id="individualReviewNo" value="no">
+                        <label class="form-check-label" for="individualReviewNo">No</label>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="AssignmentPostedDate" class="form-label">Posted Date</label>
+                        <input type="date" class="form-control" id="AssignmentPostedDate" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="AssignmentDueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="AssignmentDueDate" required>
+                    </div>
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="AssignmentDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="AssignmentDescription" rows="3" required></textarea>
+                </div>
+                <hr>
+                <h5>Add a Question!</h5>
+                <label for="numQuestions" class="form-label">Number of Questions</label>
+                <input type="number" class="form-control" id="numQuestions" min="1" required>
+                <div id="questionContainer"></div>
+            </form>
+            <button class="btn btn-primary" id="submitAssignmentButton">Submit Assignment!</button>
+        </div>
+    </div>
+</div>

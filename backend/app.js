@@ -180,18 +180,22 @@ app.post("/api/signup", async (req, res) => {
 app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
 
-    //Salt and Hash the Password
-    const hashedPassword = await hashPassword(password);
-
     let connection;
     try {
         connection = await pool.getConnection();
 
         //Check if the user exists
         try {
-            const userQuery = "SELECT * FROM tblUsers WHERE username = ? AND password = ?";
-            const [user] = await connection.query(userQuery, [username, hashedPassword]);
+            const userQuery = "SELECT * FROM tblUsers WHERE username = ?";
+            const user = await connection.query(userQuery, [username]);
             if(user.length === 0) {
+                return res.status(400).json({ error: "Invalid username or password." });
+            }
+
+            //Compare passwords
+            const hashedPassword = user[0].password;
+            const passwordMatch = await bcrypt.compare(password, hashedPassword);
+            if(!passwordMatch) {
                 return res.status(400).json({ error: "Invalid username or password." });
             }
 
@@ -201,7 +205,7 @@ app.post("/api/login", async (req, res) => {
 
             //Insert the sessionID into the database
             try{
-                const sessionQuery = "INSERT INTO tblSessions (sessionID, userID) VALUES (?, ?)";
+                const sessionQuery = "INSERT INTO tblSessions (sessionID, userID, startDateTime, lastUsedDateTime, status) VALUES (?, ?, NOW(), NOW(), 'active')";
                 await connection.execute(sessionQuery, [sessionID, userID]);
             } catch (error) {
                 console.error(error);

@@ -103,6 +103,7 @@ app.get("/api/ping", async (req, res) => {
 app.post("/api/signup", async (req, res) => {
     //What should be passed in
     const { username, fname, lname, tNumber, email, password, confirmPassword } = req.body;
+    console.log(req.body);
     const userID = uuidv4();
 
     //Make sure all the data is valid
@@ -137,6 +138,7 @@ app.post("/api/signup", async (req, res) => {
             const exitingQuery = "SELECT * FROM tblUsers WHERE username = ? AND email = ?";
             const existingParams = [username, email];
             const existing = await connection.query(exitingQuery, existingParams);
+        
             if(existing.length > 0) {
                 return res.status(400).json({ error: "Username or email already in use." });
             }

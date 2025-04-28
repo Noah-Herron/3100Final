@@ -135,16 +135,15 @@ app.post("/api/signup", async (req, res) => {
 
     let connection;
     try {
-        console.log("Connecting to the database...");
         connection = await pool.getConnection();
-        console.log("Connected to the database.");
 
         //Check if the username is already in use
         try {
-            const exitingQuery = "SELECT * FROM tblUsers WHERE username = ?";
-            const [existing] = await connection.query(exitingQuery, [username]);
+            const exitingQuery = "SELECT * FROM tblUsers WHERE username = ? AND email = ?";
+            const existingParams = [username, email];
+            const existing = await connection.query(exitingQuery, existingParams);
             if(existing.length > 0) {
-                return res.status(400).json({ error: "Username already in use." });
+                return res.status(400).json({ error: "Username or email already in use." });
             }
         } catch (error) {
             console.error(error);
@@ -153,8 +152,14 @@ app.post("/api/signup", async (req, res) => {
 
         //Insert the user into the database
         try {
-            const insertQuery = "INSERT INTO tblUsers (userID, username, fname, lname, tNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)";
-            await connection.query(insertQuery, [userID, username, fname, lname, tNumber, email, hashedPassword]);
+            //Get the current date and time
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+
+            //Insert the user into the database
+            const insertQuery = "INSERT INTO tblUsers (userID, username, firstName, lastName, tNumber, email, password, creationDateTime, lastLoginDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            const insertParams = [userID, username, fname, lname, tNumber, email, hashedPassword, formattedDate, formattedDate];
+            await connection.query(insertQuery, insertParams);
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: "Error inserting user into database." });

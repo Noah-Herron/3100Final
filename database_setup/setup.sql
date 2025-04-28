@@ -42,8 +42,10 @@ DROP PROCEDURE IF EXISTS DropAllTables; -- Drop the procedure after use
 -- Users Table
 CREATE TABLE tblUsers (
     userID VARCHAR(255) PRIMARY KEY,
+    userName TEXT NOT NULL,
     firstName TEXT NOT NULL,
     lastName TEXT NOT NULL,
+    tNumber TEXT NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     creationDateTime TEXT NOT NULL,

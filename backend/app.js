@@ -44,30 +44,25 @@ async function isValidSession(sessionID, userID) {
     try {
         connection = await pool.getConnection();
 
-    //Validate the session
-    const result = await connection.execute(
-      "SELECT * FROM tblSession WHERE sessionID = ? AND expiresAt > NOW()",
-        [sessionID]
-    );
-
-    //Check to see if there is a user with this session
-    const userSessionResult = await connection.execute("SELECT * FROM tblUser WHERE sessionID = ? AND userID = ?", [sessionID, userID]);
-    if(userSessionResult.length === 0){
-        return false;
-    }
-    
-    //If the session doesn't exist
-    if (result.length === 0 /*|| userSessionResult === 0*/) {
-        return false;
-    } else {
-      //Update the last activity
-        await connection.execute(
-        "UPDATE tblSession SET expiresAt = NOW() + INTERVAL 5 MINUTE WHERE sessionID = ?",
-        [sessionID]
+        //Validate the session
+        const result = await connection.execute(
+        "SELECT * FROM tblSessions WHERE sessionID = ? AND userID = ?",
+            [sessionID, userID]
         );
-      //Return true if the check
-        return true;
-    }
+    
+        //If the session doesn't exist
+        if (result[0].length === 0 /*|| userSessionResult === 0*/) {
+            return false;
+        } else {
+            //Update the last activity
+            await connection.execute(
+                "UPDATE tblSessions SET lastUsedDateTime = NOW() WHERE sessionID = ?",
+                [sessionID]
+            );
+            
+            //Return true if the check
+            return true;
+        }
     } catch (error) {
         console.error("Error checking session", error);
         return false;

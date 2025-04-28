@@ -1,17 +1,28 @@
-require("dotenv").config();
+//const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
-const pool = require("./db");
+//const pool = require("./db");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
+const mariadb = require('mariadb');
+
+//dotenv.config({ path: "./.env" });
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
+
+const pool = mariadb.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'GuitarStrummer123',
+    database: '3100Final',
+    connectionLimit: 5
+});
 
 const PORT = process.env.PORT || 5000;
 
@@ -66,8 +77,31 @@ async function isValidSession(sessionID, userID) {
 }
 
 //To make sure the api works
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("Hello World!");
+});
+
+app.get("/api/ping", async (req, res) => {
+    console.log(process.env);
+
+    
+    const pool = mariadb.createPool({
+        host: 'localhost',
+        user: 'root',
+        password: 'GuitarStrummer123',
+        database: '3100Final',
+        connectionLimit: 5
+    });
+
+    try {
+        const connection = await pool.getConnection();
+        console.log("Connected to the database!");
+        await connection.ping();
+        console.log("Ping successful.");
+        connection.end();
+    } catch (err) {
+        console.error("Error:", err);
+    }
 });
 
 //Signup Route
@@ -101,6 +135,7 @@ app.post("/api/signup", async (req, res) => {
 
     let connection;
     try {
+        console.log("Connecting to the database...");
         connection = await pool.getConnection();
         console.log("Connected to the database.");
 

@@ -1,0 +1,51 @@
+<!-- Settings Page -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Account Settings</h1>
+</div>
+
+<div class="d-flex flex-column gap-3">
+    <div class="card shadow-sm p-4">
+        <h4 class="mb-3">User Info</h4>
+        <form>
+            <div class="mb-3 row">
+                <div class="col-md-6">
+                    <label for="userName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="userName" placeholder="John Doe">
+                </div>
+                <div class="col-md-6">
+                    <label for="userEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="userEmail" placeholder="john@example.com">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-md-6">
+                    <label for="userPassword" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="userPassword" placeholder="••••••••">
+                </div>
+                <div class="col-md-6">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+        </form>
+    </div>
+
+    <div class="card shadow-sm p-4">
+        <h4 class="mb-3">Preferences</h4>
+        <form>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                <label class="form-check-label" for="emailNotifications">Enable Email Notifications</label>
+            </div>
+            <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                <label class="form-check-label" for="darkModeToggle">Enable Dark Mode</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Preferences</button>
+        </form>
+    </div>
+</div>

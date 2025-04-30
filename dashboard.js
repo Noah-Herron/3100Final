@@ -33,10 +33,10 @@ const contentMap = {
         const calendarResponse = await fetch('/dashboardFiles/calendar.html');
         return await calendarResponse.text();
     },
-    settings: `
-        <h2>Settings</h2>
-        <p>This is your settings section.</p>
-    `,
+    settings: async () => {
+        const settingsResponse = await fetch('/dashboardFiles/settings.html');
+        return await settingsResponse.text();
+    },
     logout: async () => {
         await Swal.fire({
             icon: 'info',
@@ -91,6 +91,9 @@ async function loadContent(page) {
 
     if (page === 'calendar') {
         renderCalendar();
+    }
+    if (page === 'settings') {
+        rendersettings();
     }
 }
 

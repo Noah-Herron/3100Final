@@ -1,4 +1,6 @@
 /* This is where we dynamically load the content for the dashboard */
+//Required Libraries
+import Cookies from "https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/+esm";;
 
 const contentMap = {
     profile: async () => {
@@ -463,5 +465,38 @@ document.querySelectorAll('.nav-link').forEach((link) => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
+    //Vertify the session to get to the dashboard
+    const sessionID = Cookies.get('sessionID');
+    const userID = Cookies.get('userID');
+
+    if (!sessionID || !userID) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Session Error',
+            text: 'Session expired. Please log in again.',
+        });
+        window.location.href = "index.html"; // Redirect to login page
+        return;
+    }
+
+    // Check if the session is valid
+    const response = await fetch('http://127.0.0.1:5000/api/dashboard', {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        await Swal.fire({
+            icon: 'error',  
+            title: 'Session Error',
+            text: 'Session expired. Please log in again.',
+        });
+        window.location.href = "index.html"; // Redirect to login page
+        return;
+    }
+
+    const data = await response.json();
+    console.log(data.message); // Log the welcome message
+
     loadContent('profile'); // Load the default page
 });

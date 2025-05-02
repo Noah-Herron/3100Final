@@ -171,7 +171,6 @@
         .btn-white {
             border-color: rgba(255, 255, 255, 0.549);
             color: white;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.549);
             transition: background-color 0.3s, box-shadow 0.3s;
         }
 
@@ -337,17 +336,17 @@
                 <!-- Inline Nav Buttons -->
                 <ul class="nav-buttons d-flex flex-nowrap align-items-center mb-0">
                     <li><button class="custom-nav-button">Home</button></li>
-                    <li><button class="custom-nav-button">Assets</button></li>
+                    <!--<li><button class="custom-nav-button">Assets</button></li>
                     <li><button class="custom-nav-button">Features</button></li>
                     <li><button class="custom-nav-button">Pricing</button></li>
-                    <li><button class="custom-nav-button">FAQ</button></li>
+                    <li><button class="custom-nav-button">FAQ</button></li>-->
                 </ul>
 
                 <!-- Hamburger toggle (for small screens only) -->
-                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler btn-white d-lg-none" type="button" data-bs-toggle="collapse"
                     data-bs-target="#authMenu" aria-controls="authMenu" aria-expanded="false"
                     aria-label="Toggle authentication menu">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon" style="filter: brightness(0) invert(1);"></span>
                 </button>
 
                 <!-- Auth buttons: collapsible on mobile, inline on desktop -->

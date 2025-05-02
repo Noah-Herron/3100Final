@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
 const mariadb = require('mariadb');
+const { getUserAssignments, getUserGroups } = require('./db');
 
 //dotenv.config({ path: "./.env" });
 
@@ -254,6 +255,57 @@ app.get("/api/dashboard", async (req, res) => {
 
     //If the session is valid, return the dashboard data
     res.status(200).json({ message: "Welcome to the dashboard!" });
+});
+
+// API to fetch user profile
+app.get('/api/profile/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const profile = await getUserProfile(userId);
+
+        if (!profile) {
+            return res.status(404).json({ error: 'Profile not found' });
+        }
+
+        res.json(profile);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+// API to fetch assignments for a user
+app.get('/api/assignments/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const assignments = await getUserAssignments(userId);
+
+        if (!assignments || assignments.length === 0) {
+            return res.status(404).json({ error: 'No assignments found' });
+        }
+
+        res.json(assignments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+// API to fetch user groups
+app.get('/api/groups/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const groups = await getUserGroups(userId);
+
+        if (!groups || groups.length === 0) {
+            return res.status(404).json({ error: 'No groups found' });
+        }
+
+        res.json(groups);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
 });
 
 

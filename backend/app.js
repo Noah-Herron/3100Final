@@ -229,6 +229,55 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // API to fetch user profile
 app.get('/api/profile/:id', async (req, res) => {
     try {

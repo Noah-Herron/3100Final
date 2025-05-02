@@ -12,7 +12,11 @@ const { getUserAssignments, getUserGroups } = require('./db');
 //dotenv.config({ path: "./.env" });
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "http://127.0.0.1:8080",
+    credentials: true,
+}));
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
@@ -211,8 +215,17 @@ app.post("/api/login", async (req, res) => {
             }
 
             //Set sessionID and userID as cookies
-            res.cookie("sessionID", sessionID, { httpOnly: true });
-            res.cookie("userID", userID, { httpOnly: true });
+            res.cookie("sessionID", sessionID, { 
+                httpOnly: false, 
+                secure: false, 
+                maxAge: 1000 * 60 * 60 * 24 // 1 day
+            });
+
+            res.cookie("userID", userID, { 
+                httpOnly: false, 
+                secure: false, 
+                maxAge: 1000 * 60 * 60 * 24 // 1 day
+            });
 
             return res.status(200).json({ message: "Login successful." });
         } catch (error) {
@@ -229,54 +242,20 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
+//Vertify the session to get to the dashboard
+app.get("/api/dashboard", async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
 
+    //Check if the session is valid
+    const isValid = await isValidSession(sessionID, userID);
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //If the session is valid, return the dashboard data
+    res.status(200).json({ message: "Welcome to the dashboard!" });
+});
 
 // API to fetch user profile
 app.get('/api/profile/:id', async (req, res) => {
@@ -328,6 +307,7 @@ app.get('/api/groups/:id', async (req, res) => {
         res.status(500).json({ error: 'Database error' });
     }
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

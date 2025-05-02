@@ -1,17 +1,32 @@
-require("dotenv").config();
+//const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
-const pool = require("./db");
+//const pool = require("./db");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
+const mariadb = require('mariadb');
+
+//dotenv.config({ path: "./.env" });
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "http://127.0.0.1:8080",
+    credentials: true,
+}));
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
+
+const pool = mariadb.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'GuitarStrummer123',
+    database: '3100Final',
+    connectionLimit: 5
+});
 
 const PORT = process.env.PORT || 5000;
 
@@ -33,30 +48,25 @@ async function isValidSession(sessionID, userID) {
     try {
         connection = await pool.getConnection();
 
-    //Validate the session
-    const result = await connection.execute(
-      "SELECT * FROM tblSession WHERE sessionID = ? AND expiresAt > NOW()",
-        [sessionID]
-    );
-
-    //Check to see if there is a user with this session
-    const userSessionResult = await connection.execute("SELECT * FROM tblUser WHERE sessionID = ? AND userID = ?", [sessionID, userID]);
-    if(userSessionResult.length === 0){
-        return false;
-    }
-    
-    //If the session doesn't exist
-    if (result.length === 0 /*|| userSessionResult === 0*/) {
-        return false;
-    } else {
-      //Update the last activity
-        await connection.execute(
-        "UPDATE tblSession SET expiresAt = NOW() + INTERVAL 5 MINUTE WHERE sessionID = ?",
-        [sessionID]
+        //Validate the session
+        const result = await connection.execute(
+        "SELECT * FROM tblSessions WHERE sessionID = ? AND userID = ?",
+            [sessionID, userID]
         );
-      //Return true if the check
-        return true;
-    }
+    
+        //If the session doesn't exist
+        if (result[0].length === 0 /*|| userSessionResult === 0*/) {
+            return false;
+        } else {
+            //Update the last activity
+            await connection.execute(
+                "UPDATE tblSessions SET lastUsedDateTime = NOW() WHERE sessionID = ?",
+                [sessionID]
+            );
+            
+            //Return true if the check
+            return true;
+        }
     } catch (error) {
         console.error("Error checking session", error);
         return false;
@@ -66,14 +76,38 @@ async function isValidSession(sessionID, userID) {
 }
 
 //To make sure the api works
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("Hello World!");
+});
+
+app.get("/api/ping", async (req, res) => {
+    console.log(process.env);
+
+    
+    const pool = mariadb.createPool({
+        host: 'localhost',
+        user: 'root',
+        password: 'GuitarStrummer123',
+        database: '3100Final',
+        connectionLimit: 5
+    });
+
+    try {
+        const connection = await pool.getConnection();
+        console.log("Connected to the database!");
+        await connection.ping();
+        console.log("Ping successful.");
+        connection.end();
+    } catch (err) {
+        console.error("Error:", err);
+    }
 });
 
 //Signup Route
 app.post("/api/signup", async (req, res) => {
     //What should be passed in
     const { username, fname, lname, tNumber, email, password, confirmPassword } = req.body;
+    console.log(req.body);
     const userID = uuidv4();
 
     //Make sure all the data is valid
@@ -102,14 +136,15 @@ app.post("/api/signup", async (req, res) => {
     let connection;
     try {
         connection = await pool.getConnection();
-        console.log("Connected to the database.");
 
         //Check if the username is already in use
         try {
-            const exitingQuery = "SELECT * FROM tblUsers WHERE username = ?";
-            const [existing] = await connection.query(exitingQuery, [username]);
+            const exitingQuery = "SELECT * FROM tblUsers WHERE username = ? AND email = ?";
+            const existingParams = [username, email];
+            const existing = await connection.query(exitingQuery, existingParams);
+        
             if(existing.length > 0) {
-                return res.status(400).json({ error: "Username already in use." });
+                return res.status(400).json({ error: "Username or email already in use." });
             }
         } catch (error) {
             console.error(error);
@@ -118,8 +153,14 @@ app.post("/api/signup", async (req, res) => {
 
         //Insert the user into the database
         try {
-            const insertQuery = "INSERT INTO tblUsers (userID, username, fname, lname, tNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)";
-            await connection.query(insertQuery, [userID, username, fname, lname, tNumber, email, hashedPassword]);
+            //Get the current date and time
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+
+            //Insert the user into the database
+            const insertQuery = "INSERT INTO tblUsers (userID, username, firstName, lastName, tNumber, email, password, creationDateTime, lastLoginDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            const insertParams = [userID, username, fname, lname, tNumber, email, hashedPassword, formattedDate, formattedDate];
+            await connection.query(insertQuery, insertParams);
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: "Error inserting user into database." });
@@ -140,18 +181,22 @@ app.post("/api/signup", async (req, res) => {
 app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
 
-    //Salt and Hash the Password
-    const hashedPassword = await hashPassword(password);
-
     let connection;
     try {
         connection = await pool.getConnection();
 
         //Check if the user exists
         try {
-            const userQuery = "SELECT * FROM tblUsers WHERE username = ? AND password = ?";
-            const [user] = await connection.query(userQuery, [username, hashedPassword]);
+            const userQuery = "SELECT * FROM tblUsers WHERE username = ?";
+            const user = await connection.query(userQuery, [username]);
             if(user.length === 0) {
+                return res.status(400).json({ error: "Invalid username or password." });
+            }
+
+            //Compare passwords
+            const hashedPassword = user[0].password;
+            const passwordMatch = await bcrypt.compare(password, hashedPassword);
+            if(!passwordMatch) {
                 return res.status(400).json({ error: "Invalid username or password." });
             }
 
@@ -161,7 +206,7 @@ app.post("/api/login", async (req, res) => {
 
             //Insert the sessionID into the database
             try{
-                const sessionQuery = "INSERT INTO tblSessions (sessionID, userID) VALUES (?, ?)";
+                const sessionQuery = "INSERT INTO tblSessions (sessionID, userID, startDateTime, lastUsedDateTime, status) VALUES (?, ?, NOW(), NOW(), 'active')";
                 await connection.execute(sessionQuery, [sessionID, userID]);
             } catch (error) {
                 console.error(error);
@@ -169,8 +214,17 @@ app.post("/api/login", async (req, res) => {
             }
 
             //Set sessionID and userID as cookies
-            res.cookie("sessionID", sessionID, { httpOnly: true });
-            res.cookie("userID", userID, { httpOnly: true });
+            res.cookie("sessionID", sessionID, { 
+                httpOnly: false, 
+                secure: false, 
+                maxAge: 1000 * 60 * 60 * 24 // 1 day
+            });
+
+            res.cookie("userID", userID, { 
+                httpOnly: false, 
+                secure: false, 
+                maxAge: 1000 * 60 * 60 * 24 // 1 day
+            });
 
             return res.status(200).json({ message: "Login successful." });
         } catch (error) {
@@ -186,6 +240,22 @@ app.post("/api/login", async (req, res) => {
         }
     }
 });
+
+//Vertify the session to get to the dashboard
+app.get("/api/dashboard", async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    //Check if the session is valid
+    const isValid = await isValidSession(sessionID, userID);
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    //If the session is valid, return the dashboard data
+    res.status(200).json({ message: "Welcome to the dashboard!" });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

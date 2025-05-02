@@ -110,8 +110,32 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!valid) {
             Swal.fire({ icon: "error", title: "Login Failed", text: "Please enter valid credentials." });
         } else {
-            await Swal.fire({ icon: "success", title: "Welcome Back!", text: "Login successful." });
-            window.location.href = "dashboard.html";
+            // Here you would typically send the data to the server
+            let loginData = {
+                username: username,
+                password: password
+            };
+
+            try {
+                let response = await fetch("http://127.0.0.1:5000/api/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(loginData),
+                    credentials: "include"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Login failed.");
+                }
+                await Swal.fire({ icon: "success", title: "Welcome Back!", text: "Login successful." });
+                window.location.href = "dashboard.html";
+            } catch (error) {
+                console.error("Error:", error);
+                Swal.fire({ icon: "error", title: "Login Failed", text: "Invalid username or password." });
+                return;
+            }
         }
     });
 

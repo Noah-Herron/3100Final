@@ -308,6 +308,97 @@ app.get('/api/groups/:id', async (req, res) => {
     }
 });
 
+app.get('/api/surveyQuestions', async (req, res) => {
+    //Check session validity
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    const { assesmentID } = req.query;
+    if(!assesmentID) {
+        return res.status(400).json({ error: "Assessment ID is required." });
+    }
+
+    if(!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const surveyQuery = "SELECT * FROM tblSurvey WHERE assesmentID = ?";
+        const surveyParams = [assesmentID];
+        const surveyResults = await connection.query(surveyQuery, surveyParams);
+
+        if(surveyResults.length === 0) {
+            return res.status(404).json({ error: "No survey found." });
+        }
+
+        res.status(200).json(surveyResults);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+app.get('/api/surveys', async (req, res) => {
+    //Check session validity
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if(!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { instructorID, studentID} = req.query;
+    if(!instructorID && !studentID) {
+        return res.status(400).json({ error: "Instructor ID or Student ID is required." });
+    }
+    if(instructorID && studentID) {
+        return res.status(400).json({ error: "Only one of Instructor ID or Student ID is required." });
+    }
+
+    let surveyQuery;
+    let surveyParams;
+    if(instructorID) {
+        //Fetch surveys for instructor
+        surveyQuery = "SELECT * FROM tblSurvey WHERE instructorID = ?";
+        surveyParams = [instructorID];
+    }
+    if(studentID) {
+        //Fetch surveys for student
+        surveyQuery = "SELECT * FROM tblSurvey WHERE studentID = ?";
+        surveyParams = [studentID];
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        const surveyResults = await connection.query(surveyQuery, surveyParams);
+        
+        if(surveyResults.length === 0) {
+            return res.status(404).json({ error: "No surveys found." });
+        }
+
+        res.status(200).json(surveyResults);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

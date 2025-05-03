@@ -535,6 +535,50 @@ app.get('/api/survey/grade', async (req, res) => {
     }
 });
 
+app.post('/api/survey/answer', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+    if (!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { assessmentID, studentID, questionID, response, targetUserID, public } = req.body;
+    if (!assessmentID || !studentID || !questionID || !response) {
+        return res.status(400).json({ error: "Answer data is required." });
+    }
+
+    const responseID = uuidv4();
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Insert the answer data into the database
+        const insertQuery = "INSERT INTO tblSurveyAnswers (responseID, assessmentID, studentID, questionID, response, targetUserID, public) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        const answerData = [responseID, assessmentID, userID, questionID, response, targetUserID, public];
+        const results = await connection.query(insertQuery, [answerData]);
+
+        if (results.affectedRows === 0) {
+            return res.status(500).json({ error: "Error inserting answer into database." });
+        }
+
+        res.status(201).json({ message: "Answer submitted successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
+
 app.delete('/api/logout', async (req, res) => {
     const sessionID = req.cookies.sessionID;
     const userID = req.cookies.userID;

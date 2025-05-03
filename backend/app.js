@@ -493,6 +493,48 @@ app.post('/api/survey/question', async (req, res) => {
     }
 });
 
+app.get('/api/survey/grade', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+    if (!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { assessmentID, studentID } = req.query;
+    if (!assessmentID || !studentID) {
+        return res.status(400).json({ error: "Assessment ID and Student ID are required." });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Fetch the grades for the assessment and student
+        const gradeQuery = "SELECT * FROM tblAssesments WHERE assessmentID = ? AND studentID = ?";
+        const gradeParams = [assessmentID, studentID];
+        const gradeResults = await connection.query(gradeQuery, gradeParams);
+
+        if (gradeResults.length === 0) {
+            return res.status(404).json({ error: "No grades found." });
+        }
+
+        res.status(200).json(gradeResults);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
+
 app.delete('/api/logout', async (req, res) => {
     const sessionID = req.cookies.sessionID;
     const userID = req.cookies.userID;

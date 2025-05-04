@@ -40,13 +40,38 @@ const contentMap = {
         return await settingsResponse.text();
     },
     logout: async () => {
-        await Swal.fire({
-            icon: 'info',
-            title: 'Logout',
-            text: 'You have been logged out.',
-        });
-        // Simulate logout process
-        window.location.href = "index.html";
+        const sessionID = Cookies.get('sessionID');
+        const userID = Cookies.get('userID');
+
+        if (sessionID) {
+            const response = await fetch('http://127.0.0.1:5000/api/logout', {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Logged Out',
+                    text: 'You have been logged out successfully.',
+                });
+
+                window.location.href = "index.html"; // Redirect to login page
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Logout Failed',
+                    text: 'An error occurred while logging out.',
+                });
+            }
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Logout Failed',
+                text: 'You are not logged in.',
+            });
+            window.location.href = "index.html"; // Redirect to login page
+        }
     }
 };
 

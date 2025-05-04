@@ -153,10 +153,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("btnCloseSignUp").addEventListener("click", () => {
         document.getElementById("signUpCard").style.display = "none";
+        document.getElementById("mainCard").style.display = "block";
     });
 
     document.getElementById("btnCloseLogin").addEventListener("click", () => {
         document.getElementById("loginCard").style.display = "none";
+        document.getElementById("mainCard").style.display = "block";
+    });
+
+    document.getElementById("btnHome").addEventListener("click", () => {
+        document.getElementById("mainCard").style.display = "block";
     });
 
     // for the smaller buttons of the forms

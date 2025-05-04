@@ -493,6 +493,37 @@ app.post('/api/survey/question', async (req, res) => {
     }
 });
 
+app.delete('/api/logout', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Delete the session from the database
+        const deleteQuery = "DELETE FROM tblSessions WHERE sessionID = ? AND userID = ?";
+        await connection.query(deleteQuery, [sessionID, userID]);
+
+        //Clear the cookies
+        res.clearCookie("sessionID");
+        res.clearCookie("userID");
+
+        res.status(200).json({ message: "Logged out successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

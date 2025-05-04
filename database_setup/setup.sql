@@ -96,15 +96,16 @@ CREATE TABLE tblAssesments (
     assesmentID VARCHAR(255) PRIMARY KEY,
     courseID VARCHAR(255) NOT NULL,
     instructorID VARCHAR(255) NOT NULL,
-    userID VARCHAR(255) NOT NULL,
+    studentID VARCHAR(255) NOT NULL,
     startDate TEXT NOT NULL,
     endDate TEXT NOT NULL,
     name TEXT NOT NULL,
     status TEXT NOT NULL,
     type TEXT NOT NULL,
+    grade TEXT NOT NULL,
     FOREIGN KEY (courseID) REFERENCES tblCourses(courseID),
     FOREIGN KEY (instructorID) REFERENCES tblUsers(userID),
-    FOREIGN KEY (userID) REFERENCES tblUsers(userID)
+    FOREIGN KEY (studentID) REFERENCES tblUsers(userID)
 );
  
 -- Assessment Questions Table

@@ -13,11 +13,11 @@ const { getAssignmentsByUser, getUserGroups } = require('./db');
 
 const app = express();
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
+    origin: 'http://127.0.0.1:8080',
     credentials: true
 }));
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
 
@@ -210,14 +210,14 @@ app.post("/api/login", async (req, res) => {
 
             //Set sessionID and userID as cookies
             res.cookie("sessionID", sessionID, {
-                httpOnly: false,
+                httpOnly: true,
                 secure: false,
                 sameSite: "Lax",
                 maxAge: 1000 * 60 * 60 * 24 // 1 day
             });
             
             res.cookie("userID", userID, {
-                httpOnly: false,
+                httpOnly: true,
                 secure: false,
                 sameSite: "Lax",
                 maxAge: 1000 * 60 * 60 * 24 // 1 day 
@@ -255,41 +255,52 @@ app.get("/api/dashboard", async (req, res) => {
 
 // API to fetch user profile
 app.get('/api/profile', async (req, res) => {
-    const userID = req.cookies.userID;
-    console.log("Cookies:", req.cookies);
+    // const userID = req.cookies.userID;
+    // console.log("Cookies:", req.cookies);
 
+
+    // if (!userID) {
+    //     return res.status(400).json({ error: 'Missing userID in cookies' });
+    // }
+
+    // try {
+    //     const rawUser = await getUserProfile(userID);
+
+    //     if (rawUser) {
+    //         const profile = {
+    //             username: rawUser.userName,
+    //             firstName: rawUser.firstName,
+    //             lastName: rawUser.lastName,
+    //             tNumber: rawUser.tNumber,
+    //             email: rawUser.email,
+    //             phone: null,
+    //             major: null,
+    //             minor: null,
+    //             instructorCount: 0,
+    //             memberCount: 0,
+    //             location: null,
+    //             officeHours: null,
+    //             bio: null
+    //         };
+    //         res.json(profile);
+    //     } else {
+    //         res.status(404).json({ error: 'User not found' });
+    //     }
+    // } catch (err) {
+    //     console.error('Error retrieving profile:', err);
+    //     res.status(500).json({ error: 'Server error' });
+    // }
+    console.log("==== /api/profile hit ====");
+    console.log("Request cookies:", req.cookies);
+
+    const userID = req.cookies?.userID;
 
     if (!userID) {
-        return res.status(400).json({ error: 'Missing userID in cookies' });
+        console.warn("No userID cookie received!");
+        return res.status(400).json({ error: "Missing userID cookie." });
     }
 
-    try {
-        const rawUser = await getUserProfile(userID);
-
-        if (rawUser) {
-            const profile = {
-                username: rawUser.userName,
-                firstName: rawUser.firstName,
-                lastName: rawUser.lastName,
-                tNumber: rawUser.tNumber,
-                email: rawUser.email,
-                phone: null,
-                major: null,
-                minor: null,
-                instructorCount: 0,
-                memberCount: 0,
-                location: null,
-                officeHours: null,
-                bio: null
-            };
-            res.json(profile);
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (err) {
-        console.error('Error retrieving profile:', err);
-        res.status(500).json({ error: 'Server error' });
-    }
+    res.status(200).json({ message: "User ID received", userID });
 });
 
 // API to fetch assignments for a user

@@ -90,7 +90,7 @@
             link.addEventListener('click', function (e) {
                 const page = this.getAttribute('data-page');
                 if (page === 'profile') {
-                    fetch('http://localhost:5000/api/profile/')  // Replace 1 with dynamic ID later
+                    fetch('http://127.0.0.1:5000/api/profile/')  // Replace 1 with dynamic ID later
                         .then(res => res.json())
                         .then(data => {
                             const content = `
@@ -117,7 +117,7 @@
                 if (page === 'assignments') {
                     const userId = 'USER_ID_HERE'; // dynamically set this
     
-                    fetch(`http://localhost:5000/api/assignments/${userId}`)
+                    fetch(`http://127.0.0.1:5000/api/assignments/${userId}`)
                         .then(res => res.json())
                         .then(data => {
                             if (data.error) {
@@ -149,7 +149,7 @@
                 if (page === 'groups') {
                     const userId = 'USER_ID_HERE'; // Replace dynamically
     
-                    fetch(`http://localhost:5000/api/groups/${userId}`)
+                    fetch(`http://127.0.0.1:5000/api/groups/${userId}`)
                         .then(res => res.json())
                         .then(data => {
                             if (data.error) {

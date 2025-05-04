@@ -7,14 +7,14 @@ const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
 const mariadb = require('mariadb');
-const { getUserAssignments, getUserGroups } = require('./db');
+const { getAssignmentsByUser, getUserGroups } = require('./db');
 
 //dotenv.config({ path: "./.env" });
 
 const app = express();
 app.use(cors({
-    origin: "http://127.0.0.1:8080",
-    credentials: true,
+    origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
+    credentials: true
 }));
 
 app.use(bodyParser.json());
@@ -24,9 +24,12 @@ app.use(express.json());
 const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'GuitarStrummer123',
+    password: '1234',
     database: '3100Final',
-    connectionLimit: 5
+    connectionLimit: 5,
+    allowPublicKeyRetrieval: true,
+    ssl: false ,
+    port: 3307,
 });
 
 const PORT = process.env.PORT || 5000;
@@ -83,15 +86,6 @@ app.get("/api", (req, res) => {
 
 app.get("/api/ping", async (req, res) => {
     console.log(process.env);
-
-    
-    const pool = mariadb.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: 'GuitarStrummer123',
-        database: '3100Final',
-        connectionLimit: 5
-    });
 
     try {
         const connection = await pool.getConnection();
@@ -215,16 +209,18 @@ app.post("/api/login", async (req, res) => {
             }
 
             //Set sessionID and userID as cookies
-            res.cookie("sessionID", sessionID, { 
-                httpOnly: false, 
-                secure: false, 
+            res.cookie("sessionID", sessionID, {
+                httpOnly: false,
+                secure: false,
+                sameSite: "Lax",
                 maxAge: 1000 * 60 * 60 * 24 // 1 day
             });
-
-            res.cookie("userID", userID, { 
-                httpOnly: false, 
-                secure: false, 
-                maxAge: 1000 * 60 * 60 * 24 // 1 day
+            
+            res.cookie("userID", userID, {
+                httpOnly: false,
+                secure: false,
+                sameSite: "Lax",
+                maxAge: 1000 * 60 * 60 * 24 // 1 day 
             });
 
             return res.status(200).json({ message: "Login successful." });
@@ -258,44 +254,66 @@ app.get("/api/dashboard", async (req, res) => {
 });
 
 // API to fetch user profile
-app.get('/api/profile/:id', async (req, res) => {
+app.get('/api/profile', async (req, res) => {
+    const userID = req.cookies.userID;
+    console.log("Cookies:", req.cookies);
+
+
+    if (!userID) {
+        return res.status(400).json({ error: 'Missing userID in cookies' });
+    }
+
     try {
-        const userId = req.params.id;
-        const profile = await getUserProfile(userId);
+        const rawUser = await getUserProfile(userID);
 
-        if (!profile) {
-            return res.status(404).json({ error: 'Profile not found' });
+        if (rawUser) {
+            const profile = {
+                username: rawUser.userName,
+                firstName: rawUser.firstName,
+                lastName: rawUser.lastName,
+                tNumber: rawUser.tNumber,
+                email: rawUser.email,
+                phone: null,
+                major: null,
+                minor: null,
+                instructorCount: 0,
+                memberCount: 0,
+                location: null,
+                officeHours: null,
+                bio: null
+            };
+            res.json(profile);
+        } else {
+            res.status(404).json({ error: 'User not found' });
         }
-
-        res.json(profile);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Database error' });
+    } catch (err) {
+        console.error('Error retrieving profile:', err);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
 // API to fetch assignments for a user
-app.get('/api/assignments/:id', async (req, res) => {
+app.get('/api/assignments', async (req, res) => {
+    const userID = req.cookies.userID;
+
+    if (!userID) {
+        return res.status(400).json({ error: 'Missing userID in cookies' });
+    }
+
     try {
-        const userId = req.params.id;
-        const assignments = await getUserAssignments(userId);
-
-        if (!assignments || assignments.length === 0) {
-            return res.status(404).json({ error: 'No assignments found' });
-        }
-
+        const assignments = await getAssignmentsByUser(userID);
         res.json(assignments);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Database error' });
+    } catch (err) {
+        console.error("Error retrieving assignments:", err);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
 // API to fetch user groups
-app.get('/api/groups/:id', async (req, res) => {
+app.get('/api/groups', async (req, res) => {
     try {
-        const userId = req.params.id;
-        const groups = await getUserGroups(userId);
+        const userID = req.cookies.userID;
+        const groups = await getUserGroups(userID);
 
         if (!groups || groups.length === 0) {
             return res.status(404).json({ error: 'No groups found' });

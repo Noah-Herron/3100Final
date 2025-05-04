@@ -19,7 +19,7 @@ async function getUserProfile(userID) {
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM users WHERE id = ?", [userID]);
+        const rows = await conn.query("SELECT * FROM tblusers WHERE userID = ?", [userID]);
         return rows[0] || null; // first result
     } catch (err) {
         throw err;
@@ -29,22 +29,11 @@ async function getUserProfile(userID) {
 }
 
 // functoin to get user Assignments
-async function getUserAssignments(userID) {
+async function getAssignmentsByUser(userID) {
     let conn;
     try {
         conn = await pool.getConnection();
-
-        const query = `
-            SELECT a.assesmentID, a.name, a.startDate, a.endDate, a.status, a.type, a.courseID, c.courseName
-            FROM tblAssesments a
-            JOIN tblCourses c ON a.courseID = c.courseID
-            WHERE a.courseID IN (
-                SELECT courseID FROM tblEnrollment WHERE userID = ?
-            )
-            ORDER BY a.startDate ASC
-        `;
-
-        const rows = await conn.query(query, [userID]);
+        const rows = await conn.query("SELECT * FROM tblassignments WHERE userID = ?", [userID]);
         return rows;
     } catch (err) {
         throw err;
@@ -78,6 +67,6 @@ async function getUserGroups(userID) {
 module.exports = {
     pool,
     getUserProfile,
-    getUserAssignments,
+    getAssignmentsByUser,
     getUserGroups
 };

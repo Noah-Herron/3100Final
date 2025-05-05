@@ -339,7 +339,7 @@
             <div class="container-fluid d-flex justify-content-between align-items-center px-3 flex-nowrap">
                 <!-- Inline Nav Buttons -->
                 <ul class="nav-buttons d-flex flex-nowrap align-items-center mb-0">
-                    <li><button class="custom-nav-button" id="btnHome">Home</button></li>
+                    <li><button class="custom-nav-button" id="btnHome" aria-label="Go to Home Page">Home</button></li>
                     <!--<li><button class="custom-nav-button">Assets</button></li>
                     <li><button class="custom-nav-button">Features</button></li>
                     <li><button class="custom-nav-button">Pricing</button></li>
@@ -356,8 +356,8 @@
                 <!-- Auth buttons: collapsible on mobile, inline on desktop -->
                 <div class="collapse d-lg-flex navbar-collapse auth-collapse-container justify-content-end align-items-center gap-2 mt-3 mt-lg-0"
                     id="authMenu">
-                    <button class="btn btn-purple me-lg-2" id="btnShowLogin">Login</button>
-                    <button class="btn btn-white" id="btnShowSignUp">Create Account</button>
+                    <button class="btn btn-purple me-lg-2" id="btnShowLogin" aria-label="Login button">Login</button>
+                    <button class="btn btn-white" id="btnShowSignUp" aria-label="Sign up button">Create Account</button>
                 </div>
 
             </div>
@@ -414,54 +414,54 @@
                         <h2 class="fw-bold">TTU</h2>
                         <div class="logo-image"></div>
                     </div>
-                    <button id="btnSignBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0">
+                    <button id="btnSignBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0" aria-label="Back to website button">
                         Back to website
                     </button>
                 </div>
 
                 <!-- Right Panel (Sign Up Form) -->
                 <div class="col-md-9 col-lg-9 p-4">
-                    <button id="btnCloseSignUp" class="btn-close position-absolute top-0 end-0 m-3"></button>
+                    <button id="btnCloseSignUp" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close sign up screen"></button>
                     <h1 class="fw-bold">Create an account</h1>
                     <p>
                         <h7 class="black-text">Already have an account?</h7>
-                        <a href="#" class="text-purple" id="btnShowLogin1">Log in</a>
+                        <a href="#" class="text-purple" id="btnShowLogin1" aria-label="Click here to login">Log in</a>
                     </p>
 
                     <form id="signUpForm">
-                        <input type="text" class="form-control mb-3" id="strSignUpUsername" placeholder="Username"
+                        <input type="text" class="form-control mb-3" id="strSignUpUsername" placeholder="Username" aria-label="Username"
                             required />
                         <div class="error-text" id="signUpUsernameError"></div>
                         <div class="row">
                             <div class="col-md-6 mb-2">
-                                <input type="text" class="form-control" id="strSignUpFirstName" placeholder="First name"
+                                <input type="text" class="form-control" id="strSignUpFirstName" placeholder="First name" aria-label="First name"
                                     required />
                                 <div class="error-text" id="signUpFirstNameError"></div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <input type="text" class="form-control" id="strSignUpLastName" placeholder="Last name"
+                                <input type="text" class="form-control" id="strSignUpLastName" placeholder="Last name" aria-label="Last name"
                                     required />
                                 <div class="error-text" id="signUpLastNameError"></div>
                             </div>
                         </div>
 
-                        <input type="text" class="form-control mb-3" id="strSignUpTNumber" placeholder="T-Number"
+                        <input type="text" class="form-control mb-3" id="strSignUpTNumber" placeholder="T-Number" aria-label="T-Number"
                             required />
                         <div class="error-text" id="signUpTNumberError"></div>
 
-                        <input type="email" class="form-control mb-3" id="strSignUpEmail" placeholder="Email"
+                        <input type="email" class="form-control mb-3" id="strSignUpEmail" placeholder="Email" aria-label="Email"
                             required />
                         <div class="error-text" id="signUpEmailError"></div>
 
                         <div class="input-group mb-3">
                             <input type="password" id="strSignUpPassword" class="form-control"
-                                placeholder="Enter your password" required />
+                                placeholder="Enter your password" aria-label="Please enter your password" required />
                         </div>
                         <div class="error-text" id="signUpPasswordError"></div>
 
                         <div class="input-group mb-3">
                             <input type="password" id="strSignUpConfirmPassword" class="form-control"
-                                placeholder="Confirm Password" required />
+                                placeholder="Confirm Password" aria-label="PLease confirm your password" required />
                         </div>
                         <div class="error-text" id="signUpConfirmPasswordError"></div>
 
@@ -471,7 +471,7 @@
                                 <a class="text-purple">Terms & Conditions</a></label>
                         </div>
 
-                        <button id="btnSignUp" type="submit" class="btn btn-purple w-100">
+                        <button id="btnSignUp" type="submit" class="btn btn-purple w-100" aria-label="Create account button">
                             Create account
                         </button>
                     </form>
@@ -488,39 +488,39 @@
                         <h2 class="fw-bold">TTU</h2>
                         <div class="logo-image"></div>
                     </div>
-                    <button id="btnLoginBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0">
+                    <button id="btnLoginBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0" aria-label="Back to website button">
                         Back to website
                     </button>
                 </div>
 
                 <!-- Right Panel (Login Form) -->
                 <div class="col-md-9 col-lg-9 p-4">
-                    <button id="btnCloseLogin" class="btn-close position-absolute top-0 end-0 m-3"></button>
+                    <button id="btnCloseLogin" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close login page"></button>
                     <h1 class="fw-bold">Login</h1>
                     <p>
                         <h7 class="black-text">Already have an account?</h7>
-                        <a href="#" class="text-purple" id="btnShowSignUp1">Sign Up</a>
+                        <a href="#" class="text-purple" id="btnShowSignUp1" aria-label="Sign up button">Sign Up</a>
                     </p>
 
                     <form id="loginForm">
                         <div class="input-group mb-3">
-                            <input type="text" id="strLoginUsername" class="form-control" placeholder="Username"
+                            <input type="text" id="strLoginUsername" class="form-control" placeholder="Username" aria-label="Username"
                                 required />
                         </div>
 
                         <div class="input-group mb-3">
-                            <input type="password" id="strLoginPassword" class="form-control"
+                            <input type="password" id="strLoginPassword" class="form-control" aria-label="Password"
                                 placeholder="Enter your password" required />
                         </div>
                         <div class="error-text" id="loginPasswordError"></div>
 
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="termsLogin" checked />
+                            <input class="form-check-input" type="checkbox" id="termsLogin" aria-label="Agree to terms and Conditions" checked />
                             <label class="form-check-label">I agree to the
                                 <a class="text-purple">Terms & Conditions</a></label>
                         </div>
 
-                        <button id="btnLogin" type="submit" class="btn btn-purple w-100">
+                        <button id="btnLogin" type="submit" class="btn btn-purple w-100" aria-label="Login button">
                             Login
                         </button>
                     </form>

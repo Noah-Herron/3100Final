@@ -293,11 +293,11 @@ app.get('/api/profile', async (req, res) => {
     console.log("==== /api/profile hit ====");
     console.log("Request cookies:", req.cookies);
 
-    const userID = req.cookies?.userID;
+    const userID = req.cookies.userID;
 
     if (!userID) {
         console.warn("No userID cookie received!");
-        return res.status(400).json({ error: "Missing userID cookie." });
+        return res.status(401).json({ error: "Missing userID cookie." });
     }
 
     res.status(200).json({ message: "User ID received", userID });

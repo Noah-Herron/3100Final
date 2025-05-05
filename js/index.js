@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify(loginData)
                 });
 
+                console.log("Raw login response:", response);
+
                 if (!response.ok) {
                     throw new Error("Login failed.");
                 }

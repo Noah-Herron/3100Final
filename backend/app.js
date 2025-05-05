@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
 const mariadb = require('mariadb');
-const { getAssignmentsByUser, getUserGroups } = require('./db');
+const { getAssignmentsByUser, getUserGroups, getUserProfile } = require('./db');
 
 //dotenv.config({ path: "./.env" });
 
@@ -255,52 +255,54 @@ app.get("/api/dashboard", async (req, res) => {
 
 // API to fetch user profile
 app.get('/api/profile', async (req, res) => {
-    // const userID = req.cookies.userID;
-    // console.log("Cookies:", req.cookies);
-
-
-    // if (!userID) {
-    //     return res.status(400).json({ error: 'Missing userID in cookies' });
-    // }
-
-    // try {
-    //     const rawUser = await getUserProfile(userID);
-
-    //     if (rawUser) {
-    //         const profile = {
-    //             username: rawUser.userName,
-    //             firstName: rawUser.firstName,
-    //             lastName: rawUser.lastName,
-    //             tNumber: rawUser.tNumber,
-    //             email: rawUser.email,
-    //             phone: null,
-    //             major: null,
-    //             minor: null,
-    //             instructorCount: 0,
-    //             memberCount: 0,
-    //             location: null,
-    //             officeHours: null,
-    //             bio: null
-    //         };
-    //         res.json(profile);
-    //     } else {
-    //         res.status(404).json({ error: 'User not found' });
-    //     }
-    // } catch (err) {
-    //     console.error('Error retrieving profile:', err);
-    //     res.status(500).json({ error: 'Server error' });
-    // }
-    console.log("==== /api/profile hit ====");
-    console.log("Request cookies:", req.cookies);
-
     const userID = req.cookies.userID;
+    console.log("Cookies:", req.cookies);
+
 
     if (!userID) {
-        console.warn("No userID cookie received!");
-        return res.status(401).json({ error: "Missing userID cookie." });
+        return res.status(400).json({ error: 'Missing userID in cookies' });
     }
 
-    res.status(200).json({ message: "User ID received", userID });
+    try {
+        const rawUser = await getUserProfile(userID);
+
+        if (rawUser) {
+            const profile = {
+                username: rawUser.userName,
+                firstName: rawUser.firstName,
+                lastName: rawUser.lastName,
+                tNumber: rawUser.tNumber,
+                email: rawUser.email,
+                phone: null,
+                major: null,
+                minor: null,
+                instructorCount: 0,
+                memberCount: 0,
+                location: null,
+                officeHours: null,
+                bio: null
+            };
+            res.json(profile);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (err) {
+        console.error('Error retrieving profile:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+
+    // DEBUGGING
+    // console.log("==== /api/profile hit ====");
+    // console.log("Request cookies:", req.cookies);
+
+    // const userID = req.cookies.userID;
+
+    // if (!userID) {
+    //     console.warn("No userID cookie received!");
+    //     return res.status(401).json({ error: "Missing userID cookie." });
+    // }
+
+    // res.status(200).json({ message: "User ID received", userID });
 });
 
 // API to fetch assignments for a user

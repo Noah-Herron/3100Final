@@ -37,7 +37,7 @@
             flex-direction: column;
         }
 
-        .navbar-container {
+        .ctnNavbar {
             position: fixed;
             width: 100%;
             top: 0;
@@ -55,11 +55,11 @@
             transition: all 0.4s ease-in-out;
         }
 
-        .navbar-container.shrunk {
+        .ctnNavbar.shrunk {
             top: 10px;
         }
 
-        .navbar-container.shrunk .navbar {
+        .ctnNavbar.shrunk .navbar {
             width: 60%;
             border-radius: 50px;
             background-color: #1e1e1efd !important;
@@ -82,13 +82,13 @@
             background-color: rgba(0, 0, 0, 0.386);
         }
 
-        .error-text {
+        .txtError {
             color: red;
             font-size: 0.875em;
             display: none;
         }
 
-        .black-text{
+        .txtBlack{
             color: black;
         }
 
@@ -114,51 +114,51 @@
             border-bottom-left-radius: 15px;
         }
 
-        .logo-image {
+        .imgLogo {
             background: url("image/TTULogo2.png") no-repeat center/contain;
             min-height: 200px;
         }
 
-        #signUpCard {
+        #crdSignUp {
             max-width: 1000px;
             width: 90%;
             margin: auto;
         }
 
-        #loginCard {
+        #crdLogin {
             max-width: 1000px;
             width: 90%;
             margin: auto;
         }
 
-        .hero-section {
+        .sctHero {
             padding: 120px 0 60px;
             text-align: center;
             transition: opacity 0.5s ease-in-out;
         }
 
-        .hero-section h1 span {
+        .sctHero h1 span {
             color: var(--gold);
         }
 
-        .hero-section .btn {
+        .sctHero .btn {
             margin: 10px;
             transition: transform 0.2s ease-in-out;
         }
 
-        .hero-section .btn:hover {
+        .sctHero .btn:hover {
             transform: scale(1.05);
         }
 
-        .text-purple {
+        .txtPurple {
             color: var(--bright-purple) !important;
         }
 
-        .text-purple:hover {
+        .txtPurple:hover {
             color: var(--dark-purple) !important;
         }
 
-        .btn-purple {
+        .btnPurple {
             background-color: var(--bright-purple);
             border-color: var(--bright-purple);
             color: white;
@@ -166,41 +166,41 @@
             transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .btn-purple:hover {
+        .btnPurple:hover {
             background-color: var(--dark-purple);
             border-color: var(--dark-purple);
             box-shadow: 0 0 15px var(--gold);
         }
 
-        .btn-white {
+        .btnWhite {
             border-color: rgba(255, 255, 255, 0.549);
             color: white;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .btn-white:hover {
+        .btnWhite:hover {
             background-color: var(--dark-purple);
             border-color: var(--dark-purple);
             box-shadow: 0 0 15px var(--gold);
         }
 
-        .btn-outline-light:hover {
+        .btnOutlineLight:hover {
             background-color: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
-        .section-light {
+        .sctLight {
             padding: 60px 20px;
             color: #ccc;
             transition: all 0.3s ease-in-out;
         }
 
-        .section-light h2 {
+        .sctLight h2 {
             color: white;
             transition: color 0.3s ease-in-out;
         }
 
-        .feature-card {
+        .crdFeature {
             background-color: #1e1e1e;
             border: none;
             color: white;
@@ -208,7 +208,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .feature-card:hover {
+        .crdFeature:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 25px rgba(255, 217, 0, 0.658);
         }
@@ -249,7 +249,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .nav-buttons {
+        .btnNav {
             display: flex;
             flex-wrap: nowrap;
             list-style: none;
@@ -258,11 +258,11 @@
             gap: 0.5rem;
         }
 
-        .navbar-toggler {
+        .tglNavbar {
             flex-shrink: 0;
         }
 
-        .custom-nav-button {
+        .btnCustomNav {
             background: none;
             border: 2px solid transparent;
             border-radius: 10px;
@@ -273,42 +273,42 @@
             white-space: nowrap;
         }
 
-        .custom-nav-button:hover {
+        .btnCustomNav:hover {
             border-color: var(--gold);
             background-color: rgba(0, 0, 0, 0.386);
         }
 
         /* Mobile Optimized */
         @media (max-width: 992px) {
-            .nav-buttons {
+            .btnNav {
                 gap: 0.5rem;
                 padding-right: 0.5rem;
                 max-width: calc(100% - 50px);
             }
 
-            .custom-nav-button {
+            .btnCustomNav {
                 padding: 0.4rem 0.8rem !important;
                 font-size: 0.9rem;
                 flex-shrink: 0;
             }
 
-            .navbar-toggler {
+            .tglNavbar {
                 flex-shrink: 0;
                 margin-left: 0.5rem;
             }
         }
 
         @media (max-width: 576px) {
-            .custom-nav-button {
+            .btnCustomNav {
                 font-size: 0.85rem;
                 padding: 0.3rem 0.6rem !important;
             }
 
-            .nav-buttons {
+            .btnNav {
                 gap: 0.3rem;
             }
 
-            .navbar-container.shrunk .navbar {
+            .ctnNavbar.shrunk .navbar {
                 width: 90%;
             }
         }
@@ -334,30 +334,30 @@
 </head>
 
 <body>
-    <div class="navbar-container" id="navbarContainer">
+    <div class="ctnNavbar" id="navbarContainer">
         <nav class="navbar navbar-expand-lg navbar-light justify-content-center" id="mainNavbar">
             <div class="container-fluid d-flex justify-content-between align-items-center px-3 flex-nowrap">
                 <!-- Inline Nav Buttons -->
-                <ul class="nav-buttons d-flex flex-nowrap align-items-center mb-0">
-                    <li><button class="custom-nav-button" id="btnHome" aria-label="Go to Home Page">Home</button></li>
-                    <!--<li><button class="custom-nav-button">Assets</button></li>
-                    <li><button class="custom-nav-button">Features</button></li>
-                    <li><button class="custom-nav-button">Pricing</button></li>
-                    <li><button class="custom-nav-button">FAQ</button></li>-->
+                <ul class="btnNav d-flex flex-nowrap align-items-center mb-0">
+                    <li><button class="btnCustomNav" id="btnHome" aria-label="Go to Home Page">Home</button></li>
+                    <!--<li><button class="btnCustomNav">Assets</button></li>
+                    <li><button class="btnCustomNav">Features</button></li>
+                    <li><button class="btnCustomNav">Pricing</button></li>
+                    <li><button class="btnCustomNav">FAQ</button></li>-->
                 </ul>
 
                 <!-- Hamburger toggle (for small screens only) -->
-                <button class="navbar-toggler btn-white d-lg-none" type="button" data-bs-toggle="collapse"
+                <button class="tglNavbar btnWhite d-lg-none" type="button" data-bs-toggle="collapse"
                     data-bs-target="#authMenu" aria-controls="authMenu" aria-expanded="false"
                     aria-label="Toggle authentication menu">
-                    <span class="navbar-toggler-icon" style="filter: brightness(0) invert(1);"></span>
+                    <span class="tglNavbar-icon" style="filter: brightness(0) invert(1);"></span>
                 </button>
 
                 <!-- Auth buttons: collapsible on mobile, inline on desktop -->
                 <div class="collapse d-lg-flex navbar-collapse auth-collapse-container justify-content-end align-items-center gap-2 mt-3 mt-lg-0"
                     id="authMenu">
-                    <button class="btn btn-purple me-lg-2" id="btnShowLogin" aria-label="Login button">Login</button>
-                    <button class="btn btn-white" id="btnShowSignUp" aria-label="Sign up button">Create Account</button>
+                    <button class="btn btnPurple me-lg-2" id="btnShowLogin" aria-label="Login button">Login</button>
+                    <button class="btn btnWhite" id="btnShowSignUp" aria-label="Sign up button">Create Account</button>
                 </div>
 
             </div>
@@ -366,16 +366,16 @@
 
     <div class="content-wrapper">
         <main role="main" id="mainCard" class="container text-center mt-5">
-            <section class="hero-section">
+            <section class="sctHero">
                 <div class="container">
                     <h1 class="display-4 fw-bold">One-click for <span>Peer Evaluations</span></h1>
                     <p class="lead">Streamline your group assessments with ease</p>
                     <a href="#" class="btn btn-light btn-lg">Open App</a>
-                    <a href="#features" class="btn btn-outline-light btn-lg">Discover More</a>
+                    <a href="#features" class="btn btnOutlineLight btn-lg">Discover More</a>
                 </div>
             </section>
 
-            <section class="section-light" id="features">
+            <section class="sctLight" id="features">
                 <div class="container">
                     <div class="text-center mb-5">
                         <h2 class="fw-bold">How It Works</h2>
@@ -383,19 +383,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-4">
-                            <div class="card feature-card p-4 h-100">
+                            <div class="card crdFeature p-4 h-100">
                                 <h5 class="fw-bold text-gold">Step 1</h5>
                                 <p>Create or join a group. Set your evaluation criteria in minutes.</p>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <div class="card feature-card p-4 h-100">
+                            <div class="card crdFeature p-4 h-100">
                                 <h5 class="fw-bold text-gold">Step 2</h5>
                                 <p>Each member fills out quick evaluations anonymously.</p>
                             </div>
                         </div>
                         <div class="col-md-4 mb-4">
-                            <div class="card feature-card p-4 h-100">
+                            <div class="card crdFeature p-4 h-100">
                                 <h5 class="fw-bold text-gold">Step 3</h5>
                                 <p>Review insights and export reports with one click.</p>
                             </div>
@@ -406,13 +406,13 @@
         </main>
 
         <!-- Sign Up Card-->
-        <div id="signUpCard" class="container-fluid py-4" style="display: none">
+        <div id="crdSignUp" class="container-fluid py-4" style="display: none">
             <div class="container-card row g-0 fade-in">
                 <!-- Left Panel -->
                 <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
                     <div>
                         <h2 class="fw-bold">TTU</h2>
-                        <div class="logo-image"></div>
+                        <div class="imgLogo"></div>
                     </div>
                     <button id="btnSignBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0" aria-label="Back to website button">
                         Back to website
@@ -424,54 +424,54 @@
                     <button id="btnCloseSignUp" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close sign up screen"></button>
                     <h1 class="fw-bold">Create an account</h1>
                     <p>
-                        <h7 class="black-text">Already have an account?</h7>
-                        <a href="#" class="text-purple" id="btnShowLogin1" aria-label="Click here to login">Log in</a>
+                        <h7 class="txtBlack">Already have an account?</h7>
+                        <a href="#" class="txtPurple" id="btnShowLogin1" aria-label="Click here to login">Log in</a>
                     </p>
 
                     <form id="signUpForm">
                         <input type="text" class="form-control mb-3" id="strSignUpUsername" placeholder="Username" aria-label="Username"
                             required />
-                        <div class="error-text" id="signUpUsernameError"></div>
+                        <div class="txtError" id="signUpUsernameError"></div>
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <input type="text" class="form-control" id="strSignUpFirstName" placeholder="First name" aria-label="First name"
                                     required />
-                                <div class="error-text" id="signUpFirstNameError"></div>
+                                <div class="txtError" id="signUpFirstNameError"></div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <input type="text" class="form-control" id="strSignUpLastName" placeholder="Last name" aria-label="Last name"
                                     required />
-                                <div class="error-text" id="signUpLastNameError"></div>
+                                <div class="txtError" id="signUpLastNameError"></div>
                             </div>
                         </div>
 
                         <input type="text" class="form-control mb-3" id="strSignUpTNumber" placeholder="T-Number" aria-label="T-Number"
                             required />
-                        <div class="error-text" id="signUpTNumberError"></div>
+                        <div class="txtError" id="signUpTNumberError"></div>
 
                         <input type="email" class="form-control mb-3" id="strSignUpEmail" placeholder="Email" aria-label="Email"
                             required />
-                        <div class="error-text" id="signUpEmailError"></div>
+                        <div class="txtError" id="signUpEmailError"></div>
 
                         <div class="input-group mb-3">
                             <input type="password" id="strSignUpPassword" class="form-control"
                                 placeholder="Enter your password" aria-label="Please enter your password" required />
                         </div>
-                        <div class="error-text" id="signUpPasswordError"></div>
+                        <div class="txtError" id="signUpPasswordError"></div>
 
                         <div class="input-group mb-3">
                             <input type="password" id="strSignUpConfirmPassword" class="form-control"
                                 placeholder="Confirm Password" aria-label="PLease confirm your password" required />
                         </div>
-                        <div class="error-text" id="signUpConfirmPasswordError"></div>
+                        <div class="txtError" id="signUpConfirmPasswordError"></div>
 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="termsSignUp" checked />
                             <label class="form-check-label">I agree to the
-                                <a class="text-purple">Terms & Conditions</a></label>
+                                <a class="txtPurple">Terms & Conditions</a></label>
                         </div>
 
-                        <button id="btnSignUp" type="submit" class="btn btn-purple w-100" aria-label="Create account button">
+                        <button id="btnSignUp" type="submit" class="btn btnPurple w-100" aria-label="Create account button">
                             Create account
                         </button>
                     </form>
@@ -480,13 +480,13 @@
         </div>
 
         <!-- Login Card -->
-        <div id="loginCard" class="container-fluid py-4" style="display: none">
+        <div id="crdLogin" class="container-fluid py-4" style="display: none">
             <div class="container-card row g-0 fade-in">
                 <!-- Left Panel -->
                 <div class="col-md-3 col-lg-3 left-panel d-flex flex-column justify-content-between">
                     <div>
                         <h2 class="fw-bold">TTU</h2>
-                        <div class="logo-image"></div>
+                        <div class="imgLogo"></div>
                     </div>
                     <button id="btnLoginBackToWeb" class="text-white text-decoration-none border-0 bg-transparent p-0" aria-label="Back to website button">
                         Back to website
@@ -498,8 +498,8 @@
                     <button id="btnCloseLogin" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close login page"></button>
                     <h1 class="fw-bold">Login</h1>
                     <p>
-                        <h7 class="black-text">Already have an account?</h7>
-                        <a href="#" class="text-purple" id="btnShowSignUp1" aria-label="Sign up button">Sign Up</a>
+                        <h7 class="txtBlack">Already have an account?</h7>
+                        <a href="#" class="txtPurple" id="btnShowSignUp1" aria-label="Sign up button">Sign Up</a>
                     </p>
 
                     <form id="loginForm">
@@ -512,15 +512,15 @@
                             <input type="password" id="strLoginPassword" class="form-control" aria-label="Password"
                                 placeholder="Enter your password" required />
                         </div>
-                        <div class="error-text" id="loginPasswordError"></div>
+                        <div class="txtError" id="loginPasswordError"></div>
 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="termsLogin" aria-label="Agree to terms and Conditions" checked />
                             <label class="form-check-label">I agree to the
-                                <a class="text-purple">Terms & Conditions</a></label>
+                                <a class="txtPurple">Terms & Conditions</a></label>
                         </div>
 
-                        <button id="btnLogin" type="submit" class="btn btn-purple w-100" aria-label="Login button">
+                        <button id="btnLogin" type="submit" class="btn btnPurple w-100" aria-label="Login button">
                             Login
                         </button>
                     </form>

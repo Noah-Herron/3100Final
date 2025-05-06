@@ -9,3 +9,4 @@ tempProfileAPI.txt
 Layout.txt
 
 .env
+backend/.env

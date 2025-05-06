@@ -1,30 +1,35 @@
 const mariadb = require('mariadb');
-require("dotenv").config();
+// require("dotenv").config();
 
 const pool = mariadb.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    connectionLimit: 20,
-    connectionTimeout: 20000,
-    acquireTimeout: 10000
+    host: 'localhost',
+    user: 'root',
+    password: '1234',
+    database: '3100Final',
+    connectionLimit: 5,
+    allowPublicKeyRetrieval: true,
+    ssl: false ,
+    port: 3307,
 });
 
 module.exports = pool;
 
 // function to get user Profile
 async function getUserProfile(userID) {
-    let conn;
+    const conn = await pool.getConnection();
     try {
-        conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM tblusers WHERE userID = ?", [userID]);
-        return rows[0] || null; // first result
+        const [rows] = await conn.query(`
+            SELECT userName, firstName, lastName, tNumber, email
+            FROM tblUsers
+            WHERE userID = ?
+        `, [userID]);
+
+        return rows[0]; // this returns undefined if not found
     } catch (err) {
-        throw err;
+        console.error("Error in getUserProfile:", err);
+        return null;
     } finally {
-        if (conn) conn.release();
+        conn.release();
     }
 }
 

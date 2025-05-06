@@ -1,4 +1,6 @@
 /* This is where we dynamically load the content for the dashboard */
+//Required Libraries
+import Cookies from "https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/+esm";;
 
 const contentMap = {
     profile: async () => {
@@ -38,13 +40,38 @@ const contentMap = {
         return await settingsResponse.text();
     },
     logout: async () => {
-        await Swal.fire({
-            icon: 'info',
-            title: 'Logout',
-            text: 'You have been logged out.',
-        });
-        // Simulate logout process
-        window.location.href = "index.html";
+        const sessionID = Cookies.get('sessionID');
+        const userID = Cookies.get('userID');
+
+        if (sessionID) {
+            const response = await fetch('http://127.0.0.1:5000/api/logout', {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Logged Out',
+                    text: 'You have been logged out successfully.',
+                });
+
+                window.location.href = "index.html"; // Redirect to login page
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Logout Failed',
+                    text: 'An error occurred while logging out.',
+                });
+            }
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Logout Failed',
+                text: 'You are not logged in.',
+            });
+            window.location.href = "index.html"; // Redirect to login page
+        }
     }
 };
 
@@ -463,5 +490,38 @@ document.querySelectorAll('.nav-link').forEach((link) => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
+    //Vertify the session to get to the dashboard
+    const sessionID = Cookies.get('sessionID');
+    const userID = Cookies.get('userID');
+
+    if (!sessionID || !userID) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Session Error',
+            text: 'Session expired. Please log in again.',
+        });
+        window.location.href = "index.html"; // Redirect to login page
+        return;
+    }
+
+    // Check if the session is valid
+    const response = await fetch('http://127.0.0.1:5000/api/dashboard', {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        await Swal.fire({
+            icon: 'error',  
+            title: 'Session Error',
+            text: 'Session expired. Please log in again.',
+        });
+        window.location.href = "index.html"; // Redirect to login page
+        return;
+    }
+
+    const data = await response.json();
+    console.log(data.message); // Log the welcome message
+
     loadContent('profile'); // Load the default page
 });

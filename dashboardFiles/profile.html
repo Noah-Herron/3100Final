@@ -1,6 +1,7 @@
 <h1>Profile:</h1>
 <div style="text-align: center; margin-top: 20px;">
-    <img src="/images/defaultProfile.png" alt="Profile Picture" style="max-width: 200px; height: 150px; border-radius: 50%;">
+    <img src="/images/defaultProfile.png" alt="Profile Picture"
+        style="max-width: 200px; height: 150px; border-radius: 50%;">
     <h1 class="mt-2">John Doe</h1>
     <div class="row mt-3 fs-4 justify-content-center">
         <div class="col-md-5">
@@ -46,3 +47,59 @@
     <button class="btn btn-primary mt-3 fs-3 me-3" id="editProfileBtn">Edit Profile</button>
     <button class="btn btn-danger mt-3 fs-3" id="deleteProfileBtn">Delete Profile</button>
 </div>
+
+<script>
+    async function getProfileData() {
+        // Step 1: Get cookies
+        const cookies = document.cookie.split(';').reduce((acc, pair) => {
+            const [key, value] = pair.trim().split('=');
+            acc[key] = value;
+            return acc;
+        }, {});
+        console.log(cookies)
+
+        const userID = cookies.userID;
+
+        if (!userID) {
+            console.error("No userID cookie found.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/profile", {
+                method: "GET",
+                credentials: "include"
+            });
+
+
+            if (!response.ok) {
+                const errText = await response.text();
+                console.error("Fetch failed:", response.status, errText);
+                throw new Error("Failed to fetch profile.");
+            }
+
+            const profile = await response.json();
+            console.log("Profile loaded:", profile);
+
+            // Step 3: Populate the page
+            document.querySelector("h1.mt-2").textContent = `${profile.firstName} ${profile.lastName}`;
+            document.querySelector("p:nth-of-type(1)").textContent = `Username: ${profile.username}`;
+            document.querySelector("p:nth-of-type(2)").textContent = `T-Number: ${profile.tNumber}`;
+            document.querySelector("p:nth-of-type(3)").textContent = `Email: ${profile.email}`;
+            document.querySelector("p:nth-of-type(4)").textContent = `Phone: ${profile.phone || "N/A"}`;
+            document.querySelector("p:nth-of-type(5)").textContent = `Major: ${profile.major || "N/A"}`;
+            document.querySelector("p:nth-of-type(6)").textContent = `Minor(s): ${profile.minor || "N/A"}`;
+            document.querySelector("p:nth-of-type(7)").textContent = `Instructor of ${profile.instructorCount || 0} classes`;
+            document.querySelector("p:nth-of-type(8)").textContent = `Member of ${profile.memberCount || 0} classes`;
+            document.querySelector("p:nth-of-type(9)").textContent = `Primary work location: ${profile.location || "Unknown"}`;
+            document.querySelector("p:nth-of-type(10)").textContent = `Primary available hours: ${profile.officeHours || "Unknown"}`;
+            document.querySelector("p.fs-4.mt-3").textContent = `Bio: ${profile.bio || "No bio available."}`;
+
+        } catch (err) {
+            console.error("Error loading profile:", err);
+        }
+    }
+
+    // Call this on page load
+    document.addEventListener("DOMContentLoaded", getProfileData);
+</script>

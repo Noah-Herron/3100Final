@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
@@ -16,6 +17,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row min-vh-100">
@@ -89,15 +91,26 @@
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function (e) {
                 const page = this.getAttribute('data-page');
+
                 if (page === 'profile') {
-                    fetch('http://localhost:3000/api/profile/')  // Replace 1 with dynamic ID later
+                    fetch('http://127.0.0.1:5000/api/profile/', {
+                        credentials: 'include'
+                    })
                         .then(res => res.json())
                         .then(data => {
+                            console.log("Profile data:", data);
+
+                            // Handle error response from backend
+                            if (data.error) {
+                                document.getElementById('main-content').innerHTML = `<p>${data.error}</p>`;
+                                return;
+                            }
+
                             const content = `
-                        <h2>${data.name}</h2>
-                        <p>Email: ${data.email}</p>
-                        <p>Major: ${data.major}</p>
-                    `;
+                    <h2>${data.name}</h2>
+                    <p>Email: ${data.email}</p>
+                    <p>Major: ${data.major}</p>
+                `;
                             document.getElementById('main-content').innerHTML = content;
                         })
                         .catch(err => {
@@ -113,24 +126,24 @@
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function (e) {
                 const page = this.getAttribute('data-page');
-    
+
                 if (page === 'assignments') {
                     const userId = 'USER_ID_HERE'; // dynamically set this
-    
-                    fetch(`http://localhost:3000/api/assignments/${userId}`)
+
+                    fetch(`http://127.0.0.1:5000/api/assignments/${userId}`)
                         .then(res => res.json())
                         .then(data => {
                             if (data.error) {
                                 document.getElementById('main-content').innerHTML = '<p>No assignments found.</p>';
                                 return;
                             }
-    
+
                             let html = '<h2>Your Assignments</h2><ul>';
                             data.forEach(assn => {
                                 html += `<li><strong>${assn.name}</strong> (${assn.type}) — ${assn.status}<br>Start: ${assn.startDate}, End: ${assn.endDate}</li>`;
                             });
                             html += '</ul>';
-    
+
                             document.getElementById('main-content').innerHTML = html;
                         })
                         .catch(err => {
@@ -145,24 +158,24 @@
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function (e) {
                 const page = this.getAttribute('data-page');
-    
+
                 if (page === 'groups') {
                     const userId = 'USER_ID_HERE'; // Replace dynamically
-    
-                    fetch(`http://localhost:3000/api/groups/${userId}`)
+
+                    fetch(`http://127.0.0.1:5000/api/groups/${userId}`)
                         .then(res => res.json())
                         .then(data => {
                             if (data.error) {
                                 document.getElementById('main-content').innerHTML = '<p>No groups found.</p>';
                                 return;
                             }
-    
+
                             let html = '<h2>Your Groups</h2><ul>';
                             data.forEach(group => {
                                 html += `<li><strong>${group.groupName}</strong> — Course: ${group.courseName}</li>`;
                             });
                             html += '</ul>';
-    
+
                             document.getElementById('main-content').innerHTML = html;
                         })
                         .catch(err => {
@@ -175,4 +188,5 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </body>
+
 </html>

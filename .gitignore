@@ -7,3 +7,6 @@ node_modules/
 
 tempProfileAPI.txt
 Layout.txt
+
+.env
+backend/.env

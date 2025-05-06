@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             try {
-                await fetch("http://localhost:5000/api/signup", {
+                await fetch("http://127.0.0.1:5000/api/signup", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -119,12 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 let response = await fetch("http://127.0.0.1:5000/api/login", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(loginData),
-                    credentials: "include"
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(loginData)
                 });
+
+                console.log("Raw login response:", response);
 
                 if (!response.ok) {
                     throw new Error("Login failed.");

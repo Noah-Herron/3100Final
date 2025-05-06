@@ -1,0 +1,245 @@
+<!-- TTU Coder -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Group Evaluations</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <style>
+    :root {
+        --bright-purple: #8a2be2;
+        --dark-purple: #5a1ba0;
+        --gold: #ffd700;
+    }
+
+    html,
+    body {
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        color: white;
+        background: linear-gradient(to bottom, var(--gold), var(--dark-purple));
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .navbar-container {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .navbar {
+        background-color: #1e1e1efd !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-link:hover {
+        border-color: var(--gold);
+        background-color: rgba(0, 0, 0, 0.386);
+    }
+
+    .hero-section {
+        padding: 120px 1rem 60px;
+        text-align: center;
+    }
+
+    .btn-purple {
+        background-color: var(--bright-purple);
+        border-color: var(--bright-purple);
+        color: white;
+        box-shadow: 0 0 10px var(--bright-purple);
+    }
+
+    .btn-purple:hover {
+        background-color: var(--dark-purple);
+        border-color: var(--dark-purple);
+        box-shadow: 0 0 15px var(--gold);
+    }
+
+    .feature-card {
+        background-color: #1e1e1e;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 20px rgba(137, 43, 226, 0.627);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 25px rgba(255, 217, 0, 0.658);
+    }
+
+    .container-card {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-top: 80px;
+        overflow: hidden;
+    }
+
+    .left-panel {
+        background: linear-gradient(135deg, var(--gold), var(--dark-purple));
+        color: white;
+        padding: 2rem;
+    }
+
+    .logo-image {
+        background: url("../image/TTULogo2.png") no-repeat center/contain;
+        min-height: 150px;
+    }
+
+    .footer {
+        background-color: #1e1e1efd !important;
+        color: #bbb;
+        padding: 40px 0;
+    }
+
+    .footer a {
+        color: #bbb;
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        color: #fff;
+    }
+
+    @media (max-width: 767px) {
+        .navbar .container {
+        flex-direction: column;
+        }
+
+        .auth-buttons {
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+        }
+
+        .left-panel {
+        border-radius: 0;
+        }
+    }
+    </style>
+    </head>
+
+<body>
+   <div class="navbar-container">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <div class="d-flex flex-wrap justify-content-center w-100 gap-2">
+          <ul class="nav justify-content-center flex-wrap">
+            <li class="nav-item"><a href="index.html" class="nav-link text-white">Home</a></li>
+            <li class="nav-item">
+                <button class="nav-link btn btn-link text-white" data-bs-toggle="modal" data-bs-target="#featuresModal">Features</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link btn btn-link text-white" data-bs-toggle="modal" data-bs-target="#pricingModal">Pricing</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="container-fluid pt-15 mt-5">
+    <section class="hero-section">
+      <div class="container">
+        <h1 class="display-5 fw-bold">One-click for <span style="color: var(--gold)">Peer Evaluations</span></h1>
+        <p class="lead">Streamline your group assessments with ease</p>
+        <a href="index.html" class="btn btn-light btn-lg m-1">Open App</a>
+        <a href="index.html" class="btn btn-purple btn-lg m-1">Try it for Free</a>
+      </div>
+    </section>
+
+    <section class="py-5" id="features">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold text-white">How It Works</h2>
+          <p class="lead text-white">Our evaluation tool makes collaboration smoother than ever.</p>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-4 mb-4">
+            <div class="card feature-card p-4 h-100 text-center">
+              <h5 class="fw-bold text-warning">Step 1</h5>
+              <p>Create or join a group. Set your evaluation criteria in minutes.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 mb-4">
+            <div class="card feature-card p-4 h-100 text-center">
+              <h5 class="fw-bold text-warning">Step 2</h5>
+              <p>Each member fills out quick evaluations anonymously.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 mb-4">
+            <div class="card feature-card p-4 h-100 text-center">
+              <h5 class="fw-bold text-warning">Step 3</h5>
+              <p>Review insights and export reports with one click.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="justify-content-center text-center mb-5">
+        <p><h3><b>Check out our code on GitHub!</b></h3></p>
+    <p>
+        <a href="https://github.com/Noah-Herron/3100Final" target="_blank">
+            <img src="images/view-on-github-light-text.png" alt="Link to github repository" width="300" />
+        </a>
+    </p>
+    <br>
+</div>
+
+  <footer class="footer text-center">
+    <div class="container">
+      <p>&copy; 2025 TTU Peer Evaluation Tool</p>
+      <a href="#">Privacy</a> | <a href="#">Terms</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- "Features" popup for nav bar  -->
+<div class="modal fade" id="featuresModal" tabindex="-1" aria-labelledby="featuresModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="featuresModalLabel">Features</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>⦿ Quickly create and manage peer evaluations.</p>
+          <p>⦿ Anonymous feedback system.</p>
+          <p>⦿ Exportable reports for instructors and students.</p>
+          <p>⦿ Mobile-friendly and easy to use.</p>
+          <p>⦿ Proudly Open-source</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- "Pricing" popup for nav bar -->
+  <div class="modal fade" id="pricingModal" tabindex="-1" aria-labelledby="pricingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pricingModalLabel">Pricing</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>⦿ Free for Students</p>
+          <p>⦿ Faculty Plans starting at $49.99/semester</p>
+          <p>⦿ Institutional Licenses available on request</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</body>
+
+</html>

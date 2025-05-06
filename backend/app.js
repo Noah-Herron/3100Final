@@ -7,25 +7,29 @@ const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const cookieParser = require("cookie-parser");
 const mariadb = require('mariadb');
+const { getAssignmentsByUser, getUserGroups, getUserProfile } = require('./db');
 
 //dotenv.config({ path: "./.env" });
 
 const app = express();
 app.use(cors({
-    origin: "http://127.0.0.1:8080",
-    credentials: true,
+    origin: 'http://127.0.0.1:8080',
+    credentials: true
 }));
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
 
 const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'GuitarStrummer123',
+    password: '1234',
     database: '3100Final',
-    connectionLimit: 5
+    connectionLimit: 5,
+    allowPublicKeyRetrieval: true,
+    ssl: false,
+    port: 3307,
 });
 
 const PORT = process.env.PORT || 5000;
@@ -50,10 +54,10 @@ async function isValidSession(sessionID, userID) {
 
         //Validate the session
         const result = await connection.execute(
-        "SELECT * FROM tblSessions WHERE sessionID = ? AND userID = ?",
+            "SELECT * FROM tblSessions WHERE sessionID = ? AND userID = ?",
             [sessionID, userID]
         );
-    
+
         //If the session doesn't exist
         if (result[0].length === 0 /*|| userSessionResult === 0*/) {
             return false;
@@ -63,7 +67,7 @@ async function isValidSession(sessionID, userID) {
                 "UPDATE tblSessions SET lastUsedDateTime = NOW() WHERE sessionID = ?",
                 [sessionID]
             );
-            
+
             //Return true if the check
             return true;
         }
@@ -72,7 +76,7 @@ async function isValidSession(sessionID, userID) {
         return false;
     } finally {
         if (connection) connection.release();
-    }  
+    }
 }
 
 //To make sure the api works
@@ -82,15 +86,6 @@ app.get("/api", (req, res) => {
 
 app.get("/api/ping", async (req, res) => {
     console.log(process.env);
-
-    
-    const pool = mariadb.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: 'GuitarStrummer123',
-        database: '3100Final',
-        connectionLimit: 5
-    });
 
     try {
         const connection = await pool.getConnection();
@@ -111,22 +106,22 @@ app.post("/api/signup", async (req, res) => {
     const userID = uuidv4();
 
     //Make sure all the data is valid
-    if(!usernameRegEx.test(username)) {
+    if (!usernameRegEx.test(username)) {
         return res.status(400).json({ error: "Invalid username." });
     }
-    if(!passwordRegEx.test(password)) {
+    if (!passwordRegEx.test(password)) {
         return res.status(400).json({ error: "Invalid password." });
     }
-    if(password !== confirmPassword) {
+    if (password !== confirmPassword) {
         return res.status(400).json({ error: "Passwords do not match." });
     }
-    if(!tRegEx.test(tNumber)) {
+    if (!tRegEx.test(tNumber)) {
         return res.status(400).json({ error: "Invalid T-Number." });
     }
-    if(!emailRegEx.test(email)) {
+    if (!emailRegEx.test(email)) {
         return res.status(400).json({ error: "Invalid email." });
     }
-    if(fname.length < 1 || lname.length < 1) {
+    if (fname.length < 1 || lname.length < 1) {
         return res.status(400).json({ error: "First and last name are required." });
     }
 
@@ -142,8 +137,8 @@ app.post("/api/signup", async (req, res) => {
             const exitingQuery = "SELECT * FROM tblUsers WHERE username = ? AND email = ?";
             const existingParams = [username, email];
             const existing = await connection.query(exitingQuery, existingParams);
-        
-            if(existing.length > 0) {
+
+            if (existing.length > 0) {
                 return res.status(400).json({ error: "Username or email already in use." });
             }
         } catch (error) {
@@ -171,7 +166,7 @@ app.post("/api/signup", async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Error connecting to database." });
     } finally {
-        if(connection) {
+        if (connection) {
             connection.release();
         }
     }
@@ -189,14 +184,14 @@ app.post("/api/login", async (req, res) => {
         try {
             const userQuery = "SELECT * FROM tblUsers WHERE username = ?";
             const user = await connection.query(userQuery, [username]);
-            if(user.length === 0) {
+            if (user.length === 0) {
                 return res.status(400).json({ error: "Invalid username or password." });
             }
 
             //Compare passwords
             const hashedPassword = user[0].password;
             const passwordMatch = await bcrypt.compare(password, hashedPassword);
-            if(!passwordMatch) {
+            if (!passwordMatch) {
                 return res.status(400).json({ error: "Invalid username or password." });
             }
 
@@ -205,7 +200,7 @@ app.post("/api/login", async (req, res) => {
             const userID = user[0].userID;
 
             //Insert the sessionID into the database
-            try{
+            try {
                 const sessionQuery = "INSERT INTO tblSessions (sessionID, userID, startDateTime, lastUsedDateTime, status) VALUES (?, ?, NOW(), NOW(), 'active')";
                 await connection.execute(sessionQuery, [sessionID, userID]);
             } catch (error) {
@@ -214,16 +209,18 @@ app.post("/api/login", async (req, res) => {
             }
 
             //Set sessionID and userID as cookies
-            res.cookie("sessionID", sessionID, { 
-                httpOnly: false, 
-                secure: false, 
+            res.cookie("sessionID", sessionID, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "Lax",
                 maxAge: 1000 * 60 * 60 * 24 // 1 day
             });
 
-            res.cookie("userID", userID, { 
-                httpOnly: false, 
-                secure: false, 
-                maxAge: 1000 * 60 * 60 * 24 // 1 day
+            res.cookie("userID", userID, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "Lax",
+                maxAge: 1000 * 60 * 60 * 24 // 1 day 
             });
 
             return res.status(200).json({ message: "Login successful." });
@@ -231,11 +228,11 @@ app.post("/api/login", async (req, res) => {
             console.error(error);
             return res.status(500).json({ error: "Error checking for existing user." });
         }
-    } catch (error){
+    } catch (error) {
         res.status(500).json({ error: "Error connecting to database." });
         console.error("Error connecting to the database.");
     } finally {
-        if(connection) {
+        if (connection) {
             connection.release();
         }
     }
@@ -248,7 +245,7 @@ app.get("/api/dashboard", async (req, res) => {
 
     //Check if the session is valid
     const isValid = await isValidSession(sessionID, userID);
-    if(!isValid) {
+    if (!isValid) {
         return res.status(401).json({ error: "Invalid session." });
     }
 
@@ -256,6 +253,432 @@ app.get("/api/dashboard", async (req, res) => {
     res.status(200).json({ message: "Welcome to the dashboard!" });
 });
 
+// API to fetch user profile
+app.get('/api/profile', async (req, res) => {
+    const userID = req.cookies.userID;
+    console.log("Cookies:", req.cookies);
+
+
+    if (!userID) {
+        return res.status(400).json({ error: 'Missing userID in cookies' });
+    }
+
+    try {
+        const rawUser = await getUserProfile(userID);
+
+        if (rawUser) {
+            const profile = {
+                username: rawUser.userName,
+                firstName: rawUser.firstName,
+                lastName: rawUser.lastName,
+                tNumber: rawUser.tNumber,
+                email: rawUser.email,
+                phone: null,
+                major: null,
+                minor: null,
+                instructorCount: 0,
+                memberCount: 0,
+                location: null,
+                officeHours: null,
+                bio: null
+            };
+            res.json(profile);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (err) {
+        console.error('Error retrieving profile:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+
+    // DEBUGGING
+    // console.log("==== /api/profile hit ====");
+    // console.log("Request cookies:", req.cookies);
+
+    // const userID = req.cookies.userID;
+
+    // if (!userID) {
+    //     console.warn("No userID cookie received!");
+    //     return res.status(401).json({ error: "Missing userID cookie." });
+    // }
+
+    // res.status(200).json({ message: "User ID received", userID });
+});
+
+// API to fetch assignments for a user
+app.get('/api/assignments', async (req, res) => {
+    const userID = req.cookies?.userID;
+
+    if (!userID) {
+        return res.status(401).json({ error: 'Unauthorized: Missing user ID' });
+    }
+
+    let conn;
+    try {
+        conn = await pool.getConnection();
+
+        const [rows] = await conn.query(`
+            SELECT a.assesmentID AS assignmentID, a.name AS title, a.startDate AS postedDate,
+                   a.endDate AS dueDate, a.type, a.status, c.courseName AS className,
+                   'This is a placeholder description.' AS description
+            FROM tblAssesments a
+            JOIN tblCourses c ON a.courseID = c.courseID
+            JOIN tblEnrollment e ON e.courseID = a.courseID
+            WHERE e.userID = ?
+            ORDER BY a.startDate DESC
+        `, [userID]);
+
+        res.json(rows);
+    } catch (err) {
+        console.error("Error fetching assignments:", err);
+        res.status(500).json({ error: 'Server error' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
+// API to fetch user groups
+app.get('/api/groups', async (req, res) => {
+    const userID = req.cookies?.userID;
+
+    if (!userID) {
+        return res.status(401).json({ error: 'Unauthorized: Missing user ID' });
+    }
+
+    let conn;
+    try {
+        conn = await pool.getConnection();
+
+        const [rows] = await conn.query(`
+            SELECT g.groupID, g.groupName, c.courseName, u.firstName, u.lastName,
+                   'Group description here' AS description,
+                   (SELECT COUNT(*) FROM tblAssesments WHERE courseID = g.courseID) AS tasksDue
+            FROM tblGroupMembers gm
+            JOIN tblCoursegroups g ON gm.groupID = g.groupID
+            JOIN tblCourses c ON g.courseID = c.courseID
+            JOIN tblUsers u ON gm.userID = u.userID
+            WHERE gm.userID = ?
+        `, [userID]);
+
+        // Map group leader or rename fields when needed
+        const groups = rows.map(g => ({
+            groupID: g.groupID,
+            name: g.groupName,
+            leader: `${g.firstName} ${g.lastName}`,
+            description: g.description,
+            tasksDue: g.tasksDue
+        }));
+
+        res.json(groups);
+    } catch (err) {
+        console.error("Error fetching groups:", err);
+        res.status(500).json({ error: 'Server error' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
+app.get('/api/surveyQuestions', async (req, res) => {
+    //Check session validity
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    const { assesmentID } = req.query;
+    if(!assesmentID) {
+        return res.status(400).json({ error: "Assessment ID is required." });
+    }
+
+    if(!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const surveyQuery = "SELECT * FROM tblSurvey WHERE assesmentID = ?";
+        const surveyParams = [assesmentID];
+        const surveyResults = await connection.query(surveyQuery, surveyParams);
+
+        if(surveyResults.length === 0) {
+            return res.status(404).json({ error: "No survey found." });
+        }
+
+        res.status(200).json(surveyResults);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+app.get('/api/surveys', async (req, res) => {
+    //Check session validity
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if(!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { instructorID, studentID} = req.query;
+    if(!instructorID && !studentID) {
+        return res.status(400).json({ error: "Instructor ID or Student ID is required." });
+    }
+    if(instructorID && studentID) {
+        return res.status(400).json({ error: "Only one of Instructor ID or Student ID is required." });
+    }
+
+    let surveyQuery;
+    let surveyParams;
+    if(instructorID) {
+        //Fetch surveys for instructor
+        surveyQuery = "SELECT * FROM tblSurvey WHERE instructorID = ?";
+        surveyParams = [instructorID];
+    }
+    if(studentID) {
+        //Fetch surveys for student
+        surveyQuery = "SELECT * FROM tblSurvey WHERE studentID = ?";
+        surveyParams = [studentID];
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        const surveyResults = await connection.query(surveyQuery, surveyParams);
+        
+        if(surveyResults.length === 0) {
+            return res.status(404).json({ error: "No surveys found." });
+        }
+
+        res.status(200).json(surveyResults);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if(connection) {
+            connection.release();
+        }
+    }
+});
+
+app.post('/api/survey', async (req, res) => {
+    //Check session validity
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if(!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+
+    if(!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { courseID, instructorID, startDate, endDate, name, status, type } = req.body;
+    if(!courseID || !startDate || !endDate || !name || !status || !type) {
+        return res.status(400).json({ error: "Survey data is required." });
+    }
+
+    const assesmentID = uuidv4();
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Insert the survey data into the database
+        const insertQuery = "INSERT INTO tblSurvey (assesmentID, courseID, instructorID, startDate, endDate, name, status, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        const surveyData = [assesmentID, courseID, instructorID, startDate, endDate, name, status, type];
+        const results = await connection.query(insertQuery, [surveyData]);
+
+        if(results.affectedRows === 0) {
+            return res.status(500).json({ error: "Error inserting survey into database." });
+        }
+
+        res.status(201).json({ message: "Survey created successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if(connection) {
+            connection.release();
+        }
+    }
+});
+
+app.post('/api/survey/question', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+    if (!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { assessmentID, questionType, options, questionNarative, helperText } = req.body;
+    if (!assessmentID || !questionType || !options || !questionNarative || !helperText) {
+        return res.status(400).json({ error: "Question data is required." });
+    }
+
+    const questionID = uuidv4();
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Insert the question data into the database
+        const insertQuery = "INSERT INTO tblSurveyQuestions (questionID, assessmentID, questionType, options, questionNarative, helperText) VALUES (?, ?, ?, ?, ?, ?)";
+        const questionData = [questionID, assessmentID, questionType, options, questionNarative, helperText];
+        const results = await connection.query(insertQuery, [questionData]);
+
+        if (results.affectedRows === 0) {
+            return res.status(500).json({ error: "Error inserting question into database." });
+        }
+
+        res.status(201).json({ message: "Question created successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
+
+app.get('/api/survey/grade', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+    if (!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { assessmentID, studentID } = req.query;
+    if (!assessmentID || !studentID) {
+        return res.status(400).json({ error: "Assessment ID and Student ID are required." });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Fetch the grades for the assessment and student
+        const gradeQuery = "SELECT * FROM tblAssesments WHERE assessmentID = ? AND studentID = ?";
+        const gradeParams = [assessmentID, studentID];
+        const gradeResults = await connection.query(gradeQuery, gradeParams);
+
+        if (gradeResults.length === 0) {
+            return res.status(404).json({ error: "No grades found." });
+        }
+
+        res.status(200).json(gradeResults);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
+
+app.post('/api/survey/answer', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    const isValid = await isValidSession(sessionID, userID);
+    if (!isValid) {
+        return res.status(401).json({ error: "Invalid session." });
+    }
+
+    const { assessmentID, studentID, questionID, response, targetUserID, public } = req.body;
+    if (!assessmentID || !studentID || !questionID || !response) {
+        return res.status(400).json({ error: "Answer data is required." });
+    }
+
+    const responseID = uuidv4();
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Insert the answer data into the database
+        const insertQuery = "INSERT INTO tblSurveyAnswers (responseID, assessmentID, studentID, questionID, response, targetUserID, public) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        const answerData = [responseID, assessmentID, userID, questionID, response, targetUserID, public];
+        const results = await connection.query(insertQuery, [answerData]);
+
+        if (results.affectedRows === 0) {
+            return res.status(500).json({ error: "Error inserting answer into database." });
+        }
+
+        res.status(201).json({ message: "Answer submitted successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
+
+app.delete('/api/logout', async (req, res) => {
+    const sessionID = req.cookies.sessionID;
+    const userID = req.cookies.userID;
+
+    if (!sessionID || !userID) {
+        return res.status(401).json({ error: "Session ID or User ID not found." });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        //Delete the session from the database
+        const deleteQuery = "DELETE FROM tblSessions WHERE sessionID = ? AND userID = ?";
+        await connection.query(deleteQuery, [sessionID, userID]);
+
+        //Clear the cookies
+        res.clearCookie("sessionID");
+        res.clearCookie("userID");
+
+        res.status(200).json({ message: "Logged out successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

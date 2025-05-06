@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             try {
-                await fetch("http://localhost:5000/api/signup", {
+                await fetch("http://127.0.0.1:5000/api/signup", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -119,12 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 let response = await fetch("http://127.0.0.1:5000/api/login", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(loginData),
-                    credentials: "include"
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(loginData)
                 });
+
+                console.log("Raw login response:", response);
 
                 if (!response.ok) {
                     throw new Error("Login failed.");
@@ -140,43 +140,49 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("btnShowSignUp").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "block";
-        document.getElementById("loginCard").style.display = "none";
-        document.getElementById("mainCard").style.display = "none";
+        document.getElementById("crdSignUp").style.display = "block";
+        document.getElementById("crdLogin").style.display = "none";
+        document.getElementById("crdMain").style.display = "none";
     });
 
     document.getElementById("btnShowLogin").addEventListener("click", () => {
-        document.getElementById("loginCard").style.display = "block";
-        document.getElementById("signUpCard").style.display = "none";
-        document.getElementById("mainCard").style.display = "none";
+        document.getElementById("crdLogin").style.display = "block";
+        document.getElementById("crdSignUp").style.display = "none";
+        document.getElementById("crdMain").style.display = "none";
     });
 
     document.getElementById("btnCloseSignUp").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "none";
+        document.getElementById("crdSignUp").style.display = "none";
+        document.getElementById("crdMain").style.display = "block";
     });
 
     document.getElementById("btnCloseLogin").addEventListener("click", () => {
-        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("crdLogin").style.display = "none";
+        document.getElementById("crdMain").style.display = "block";
+    });
+
+    document.getElementById("btnHome").addEventListener("click", () => {
+        document.getElementById("crdMain").style.display = "block";
     });
 
     // for the smaller buttons of the forms
     document.getElementById("btnSignBackToWeb").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "none";
-        document.getElementById("loginCard").style.display = "none";
-        document.getElementById("mainCard").style.display = "block";
+        document.getElementById("crdSignUp").style.display = "none";
+        document.getElementById("crdLogin").style.display = "none";
+        document.getElementById("crdMain").style.display = "block";
     });
     document.getElementById("btnLoginBackToWeb").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "none";
-        document.getElementById("loginCard").style.display = "none";
-        document.getElementById("mainCard").style.display = "block";
+        document.getElementById("crdSignUp").style.display = "none";
+        document.getElementById("crdLogin").style.display = "none";
+        document.getElementById("crdMain").style.display = "block";
     });
 
     document.getElementById("btnShowLogin1").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "none";
-        document.getElementById("loginCard").style.display = "block";
+        document.getElementById("crdSignUp").style.display = "none";
+        document.getElementById("crdLogin").style.display = "block";
     });
     document.getElementById("btnShowSignUp1").addEventListener("click", () => {
-        document.getElementById("signUpCard").style.display = "block";
-        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("crdSignUp").style.display = "block";
+        document.getElementById("crdLogin").style.display = "none";
     });
 });
